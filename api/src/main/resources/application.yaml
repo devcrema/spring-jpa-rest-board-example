@@ -1,0 +1,36 @@
+spring:
+  profiles:
+    active: local
+
+#로컬 프로파일
+---
+resource-path: ${user.home}${file.separator}spring-jpa-rest-board-example-resource${file.separator}
+server:
+  port: 8080
+spring:
+  profiles: local
+  servlet:
+    multipart:
+      max-file-size: 20MB
+      max-request-size: 20MB
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: jdbc:mysql://localhost:3306/jpa_rest_board_example?useSSL=false&useUnicode=true&characterEncoding=utf8
+    username: jpa_rest_board_example_admin
+    password: jpa_rest_board_example_pw
+  jpa:
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.MySQL5InnoDBDialect
+    hibernate:
+      ddl-auto: update
+    show-sql: true
+
+logging:
+  level:
+    devcrema:
+      debug
+    org:
+      hibernate: info
+      springframework:
+        security: info
