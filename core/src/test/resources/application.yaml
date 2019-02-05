@@ -10,7 +10,8 @@ spring:
 
 logging:
   level:
-    devcrema: debug
+    devcrema:
+      spring_jpa_rest_board_example: debug
     org:
       hibernate: info
       springframework:

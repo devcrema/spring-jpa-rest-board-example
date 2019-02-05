@@ -43,10 +43,10 @@ subprojects{
 		testCompileOnly('org.projectlombok:lombok')
 
 		implementation 'org.apache.commons:commons-lang3:3.8.1'
+		implementation 'org.modelmapper:modelmapper:2.3.2'
 
 		testRuntime('com.h2database:h2')
 		testImplementation('org.springframework.boot:spring-boot-starter-test')
-		testImplementation('org.springframework.batch:spring-batch-test')
 		testImplementation('org.springframework.security:spring-security-test')
 	}
 }
