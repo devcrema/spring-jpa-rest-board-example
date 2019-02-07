@@ -27,10 +27,10 @@ Gradle 모듈
 | TODO        | done? | comment |
 |-------------|:-----:|---------|
 | 유저 구현     | O     |   spring security (UserDetails, UserDetailsService) 로 구현함.      |
-| 유저 가입     |       |  서비스까지 구현       |
+| 유저 가입     |       |  validation 만 작성하면 끝 |
 | 유저 로그인    |       |         |
 | 유저 탈퇴     |       |         |
-| api 문서 고민 | | spring rest docs or swagger ...|
+| api 문서 작성 | | maybe swagger |
 
 ## 소스 설정 방법
 1. mysql 5.7 설치 및 아래 sql 알맞게 실행

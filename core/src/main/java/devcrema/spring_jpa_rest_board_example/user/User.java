@@ -26,7 +26,7 @@ public class User extends BaseAuditingEntity implements UserDetails {
 
     @Column(unique = true, nullable = false)
     private String email;
-
+    @Column(unique = true, nullable = false)
     private String nickname;
 
     private String password;
