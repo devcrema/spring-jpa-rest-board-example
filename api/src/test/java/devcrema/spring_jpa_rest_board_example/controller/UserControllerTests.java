@@ -2,21 +2,27 @@ package devcrema.spring_jpa_rest_board_example.controller;
 
 import devcrema.spring_jpa_rest_board_example.CustomTestConfiguration;
 import devcrema.spring_jpa_rest_board_example.ResponseMessage;
-import devcrema.spring_jpa_rest_board_example.user.*;
+import devcrema.spring_jpa_rest_board_example.user.SignUpUserRequest;
+import devcrema.spring_jpa_rest_board_example.user.User;
+import devcrema.spring_jpa_rest_board_example.user.UserPasswordEncoder;
+import devcrema.spring_jpa_rest_board_example.user.UserRepository;
 import lombok.extern.slf4j.Slf4j;
+import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.test.context.junit4.SpringRunner;
+import org.springframework.validation.BindingResult;
 
 import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.fail;
+import static org.mockito.BDDMockito.given;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest(classes = CustomTestConfiguration.class)
@@ -32,6 +38,15 @@ public class UserControllerTests {
     @Autowired
     private UserPasswordEncoder userPasswordEncoder;
 
+    @MockBean
+    private BindingResult bindingResult;
+
+    @Before
+    public void setUp(){
+        //TODO mockMVC를 써서 테스트하는 것이 좋을지도
+        given(bindingResult.hasErrors()).willReturn(false);
+    }
+
     @Test
     public void testSignUp(){
         //given
@@ -44,10 +59,10 @@ public class UserControllerTests {
         long userCount = userRepository.count();
 
         //when
-        ResponseEntity<ResponseMessage> maybeOk = userController.signUp(validRequest);
-        ResponseEntity<ResponseMessage> maybeBadRequest = userController.signUp(null);
-        ResponseEntity<ResponseMessage> maybeConflictAndDuplicatedEmail = userController.signUp(duplicatedEmailRequest);
-        ResponseEntity<ResponseMessage> maybeConflictAndDuplicatedNickname = userController.signUp(duplicatedNicknameRequest);
+        ResponseEntity<ResponseMessage> maybeOk = userController.signUp(validRequest, bindingResult);
+        ResponseEntity<ResponseMessage> maybeBadRequest = userController.signUp(null, bindingResult);
+        ResponseEntity<ResponseMessage> maybeConflictAndDuplicatedEmail = userController.signUp(duplicatedEmailRequest, bindingResult);
+        ResponseEntity<ResponseMessage> maybeConflictAndDuplicatedNickname = userController.signUp(duplicatedNicknameRequest, bindingResult);
 
         //then
         assertThat(maybeOk.getStatusCode()).isEqualTo(HttpStatus.OK);

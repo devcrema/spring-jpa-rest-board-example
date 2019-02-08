@@ -7,10 +7,13 @@ import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+
+import javax.validation.Valid;
 
 import static devcrema.spring_jpa_rest_board_example.user.SignUpUserService.SignUpResult.*;
 
@@ -24,8 +27,11 @@ public class UserController {
     private final ModelMapper modelMapper;
 
     @PostMapping
-    public ResponseEntity<ResponseMessage> signUp(@RequestBody SignUpUserRequest validRequest) {
-        //TODO validate request
+    public ResponseEntity<ResponseMessage> signUp(@Valid @RequestBody SignUpUserRequest validRequest, BindingResult bindingResult) {
+        if (bindingResult.hasErrors()){
+            String errorMessage = bindingResult.getAllErrors().get(0).getDefaultMessage();
+            return new ResponseEntity<>(new ResponseMessage(errorMessage), HttpStatus.BAD_REQUEST);
+        }
 
         if (validRequest == null) {
             return new ResponseEntity<>(new ResponseMessage("request can not be null"), HttpStatus.BAD_REQUEST);
