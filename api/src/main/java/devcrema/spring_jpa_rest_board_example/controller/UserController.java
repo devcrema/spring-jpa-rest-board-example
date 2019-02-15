@@ -27,17 +27,17 @@ public class UserController {
     private final ModelMapper modelMapper;
 
     @PostMapping
-    public ResponseEntity<ResponseMessage> signUp(@Valid @RequestBody SignUpUserRequest validRequest, BindingResult bindingResult) {
+    public ResponseEntity<ResponseMessage> signUp(@Valid @RequestBody SignUpUserRequest signUpUserRequest, BindingResult bindingResult) {
         if (bindingResult.hasErrors()){
             String errorMessage = bindingResult.getAllErrors().get(0).getDefaultMessage();
             return new ResponseEntity<>(new ResponseMessage(errorMessage), HttpStatus.BAD_REQUEST);
         }
 
-        if (validRequest == null) {
+        if (signUpUserRequest == null) {
             return new ResponseEntity<>(new ResponseMessage("request can not be null"), HttpStatus.BAD_REQUEST);
         }
 
-        SignUpUserService.SignUpResult result = signUpUserService.signUp(validRequest.toUser(modelMapper));
+        SignUpUserService.SignUpResult result = signUpUserService.signUp(signUpUserRequest.toUser(modelMapper));
 
         switch (result) {
             case SUCCESS:
