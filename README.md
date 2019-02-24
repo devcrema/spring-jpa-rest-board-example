@@ -17,6 +17,7 @@ spring jpa rest board example, toy project
 |spring-security-oauth2|oauth2 인증을 위해 쓰임. 아직 설정 조금 더 공부가 필요함|
 |model mapper | DTO <-> entity 쉽게 변환가능|
 |gradle | 모듈 분리해서 사용 중 (api, core)|
+|Swagger | api 문서화 용도.|
 
 Gradle 모듈
 - api : api 게시판 서버 (controller + config)
@@ -28,9 +29,9 @@ Gradle 모듈
 |-------------|:-----:|---------|
 | 유저 구현     | O     |   spring security (UserDetails, UserDetailsService) 로 구현함.      |
 | 유저 가입     | O      | 완료 |
-| 유저 로그인    |       |         |
+| 유저 로그인    |       | oauth로 되있으니 integration test 해볼것 |
 | 유저 탈퇴     |       |         |
-| api 문서 작성 | | spring rest docs 설정? |
+| swagger 설정 다듬기 | |  |
 
 ## 소스 설정 방법
 1. mysql 5.7 설치 및 아래 sql 알맞게 실행
