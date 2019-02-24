@@ -1,31 +1,33 @@
 package devcrema.spring_jpa_rest_board_example.controller;
 
 import devcrema.spring_jpa_rest_board_example.CustomTestConfiguration;
-import devcrema.spring_jpa_rest_board_example.ResponseMessage;
 import devcrema.spring_jpa_rest_board_example.user.SignUpUserRequest;
-import devcrema.spring_jpa_rest_board_example.user.User;
+import devcrema.spring_jpa_rest_board_example.user.SignUpUserService;
 import devcrema.spring_jpa_rest_board_example.user.UserPasswordEncoder;
 import devcrema.spring_jpa_rest_board_example.user.UserRepository;
 import lombok.extern.slf4j.Slf4j;
+import org.codehaus.jackson.map.ObjectMapper;
 import org.junit.Before;
+import org.junit.BeforeClass;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
+import org.springframework.http.MediaType;
 import org.springframework.test.context.junit4.SpringRunner;
-import org.springframework.validation.BindingResult;
+import org.springframework.test.web.servlet.MockMvc;
 
-import java.util.Optional;
-
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.assertj.core.api.Assertions.fail;
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.given;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest(classes = CustomTestConfiguration.class)
+@AutoConfigureMockMvc
 @Slf4j
 public class UserControllerTests {
 
@@ -38,45 +40,71 @@ public class UserControllerTests {
     @Autowired
     private UserPasswordEncoder userPasswordEncoder;
 
+    @Autowired
+    private MockMvc mockMvc;
+
+    @Autowired
+    private ObjectMapper objectMapper;
+
     @MockBean
-    private BindingResult bindingResult;
+    private SignUpUserService signUpUserService;
+
+    @BeforeClass
+    public static void setUpBeforeClass() {
+
+    }
 
     @Before
-    public void setUp(){
-        //TODO mockMVC를 써서 테스트하는 것이 좋을지도
-        given(bindingResult.hasErrors()).willReturn(false);
+    public void setUp() {
+        given(signUpUserService.signUp(any())).willReturn(SignUpUserService.SignUpResult.SUCCESS);
     }
 
     @Test
-    public void testSignUp(){
+    public void testSignUp() throws Exception {
+        //TODO 스프링 rest docs 설정해보기
         //given
+        String url = "/api/users";
+
         String email = "email@unexistent-domain.unexistent";
         String nickname = "first user";
         String password = "testPassword";
         SignUpUserRequest validRequest = new SignUpUserRequest(email, nickname, password);
-        SignUpUserRequest duplicatedEmailRequest = new SignUpUserRequest(email, "second user", password);
-        SignUpUserRequest duplicatedNicknameRequest = new SignUpUserRequest("email2@unexistent-domain.unexistent", nickname, password);
-        long userCount = userRepository.count();
+        SignUpUserRequest invalidRequest = new SignUpUserRequest("notEmail", nickname, password);
+        SignUpUserRequest invalidRequest2 = new SignUpUserRequest(email, " ", " ");
+        SignUpUserRequest invalidRequest3 = new SignUpUserRequest(null, nickname, password);
 
-        //when
-        ResponseEntity<ResponseMessage> maybeOk = userController.signUp(validRequest, bindingResult);
-        ResponseEntity<ResponseMessage> maybeBadRequest = userController.signUp(null, bindingResult);
-        ResponseEntity<ResponseMessage> maybeConflictAndDuplicatedEmail = userController.signUp(duplicatedEmailRequest, bindingResult);
-        ResponseEntity<ResponseMessage> maybeConflictAndDuplicatedNickname = userController.signUp(duplicatedNicknameRequest, bindingResult);
+        //when,then
+        mockMvc
+                .perform(
+                        post(url)
+                                .contentType(MediaType.APPLICATION_JSON_UTF8)
+                                .content(objectMapper.writeValueAsString(validRequest)))
+                .andDo(print())
+                .andExpect(status().is2xxSuccessful());
 
-        //then
-        assertThat(maybeOk.getStatusCode()).isEqualTo(HttpStatus.OK);
-        assertThat(maybeBadRequest.getStatusCode()).isEqualTo(HttpStatus.BAD_REQUEST);
-        assertThat(maybeConflictAndDuplicatedEmail.getStatusCode()).isEqualTo(HttpStatus.CONFLICT);
-        assertThat(maybeConflictAndDuplicatedNickname.getStatusCode()).isEqualTo(HttpStatus.CONFLICT);
-        assertThat(userRepository.count()).isEqualTo(userCount + 1);
-        Optional<User> savedUser = userRepository.findByEmail(email);
-        if(savedUser.isPresent()){
-            assertThat(userPasswordEncoder.matches(password,savedUser.get().getPassword())).isTrue();
-            assertThat(savedUser.get().getNickname()).isEqualTo(nickname);
-        } else {
-            fail("saved user is not found!!");
-        }
+        mockMvc
+                .perform(
+                        post(url)
+                                .contentType(MediaType.APPLICATION_JSON_UTF8)
+                                .content(objectMapper.writeValueAsString(invalidRequest)))
+                .andDo(print())
+                .andExpect(status().is4xxClientError());
+
+        mockMvc
+                .perform(
+                        post(url)
+                                .contentType(MediaType.APPLICATION_JSON_UTF8)
+                                .content(objectMapper.writeValueAsString(invalidRequest2)))
+                .andDo(print())
+                .andExpect(status().is4xxClientError());
+
+        mockMvc
+                .perform(
+                        post(url)
+                                .contentType(MediaType.APPLICATION_JSON_UTF8)
+                                .content(objectMapper.writeValueAsString(invalidRequest3)))
+                .andDo(print())
+                .andExpect(status().is4xxClientError());
 
     }
 }
