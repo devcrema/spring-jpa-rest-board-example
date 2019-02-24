@@ -23,6 +23,15 @@ public class Oauth2ResourceConfig extends ResourceServerConfigurerAdapter {
                 csrf().disable()
                 .authorizeRequests()
                 .antMatchers(HttpMethod.POST,"/api/users").permitAll()
+                .antMatchers(HttpMethod.GET,
+                        "/v2/api-docs",
+                        "/configuration/ui",
+                        "/swagger-resources/**",
+                        "/configuration/security",
+                        "/swagger-ui.html",
+                        "/webjars/**"
+                ).permitAll()
                 .anyRequest().access("#oauth2.hasScope('USER')");
     }
+
 }

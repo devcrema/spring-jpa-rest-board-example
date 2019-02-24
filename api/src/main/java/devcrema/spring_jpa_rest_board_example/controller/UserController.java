@@ -26,7 +26,7 @@ public class UserController {
 
     private final ModelMapper modelMapper;
 
-    @PostMapping
+    @PostMapping("")
     public ResponseEntity<ResponseMessage> signUp(@Valid @RequestBody SignUpUserRequest signUpUserRequest, BindingResult bindingResult) {
         if (bindingResult.hasErrors()){
             String errorMessage = bindingResult.getAllErrors().get(0).getDefaultMessage();

@@ -61,7 +61,6 @@ public class UserControllerTests {
 
     @Test
     public void testSignUp() throws Exception {
-        //TODO 스프링 rest docs 설정해보기
         //given
         String url = "/api/users";
 
@@ -81,7 +80,6 @@ public class UserControllerTests {
                                 .content(objectMapper.writeValueAsString(validRequest)))
                 .andDo(print())
                 .andExpect(status().is2xxSuccessful());
-
         mockMvc
                 .perform(
                         post(url)
