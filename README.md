@@ -29,7 +29,7 @@ Gradle 모듈
 |-------------|:-----:|---------|
 | 유저 구현     | O     |   spring security (UserDetails, UserDetailsService) 로 구현함.      |
 | 유저 가입     | O      | 완료 |
-| 유저 로그인    |       | oauth로 되있으니 integration test 해볼것 |
+| 유저 로그인   | O      | oauth integration test 완료 |
 | 유저 탈퇴     |       |         |
 | swagger 설정 다듬기 | |  |
 

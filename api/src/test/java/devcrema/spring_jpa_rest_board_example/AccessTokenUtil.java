@@ -9,6 +9,7 @@ import org.springframework.util.MultiValueMap;
 
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.httpBasic;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -26,6 +27,7 @@ public class AccessTokenUtil {
                 .params(params)
                 .with(httpBasic(Oauth2AuthorizationConfig.CLIENT_ID, Oauth2AuthorizationConfig.CLIENT_SECRET))
                 .accept("application/json;charset=UTF-8"))
+                .andDo(print())
                 .andExpect(status().isOk())
                 .andExpect(content().contentType("application/json;charset=UTF-8"));
 
@@ -33,4 +35,5 @@ public class AccessTokenUtil {
 
         return new JacksonJsonParser().parseMap(resultString).get("access_token").toString();
     }
+
 }
