@@ -31,12 +31,15 @@ Gradle 모듈
 | 유저 가입     | O      | 완료 |
 | 유저 로그인   | O      | oauth integration test 완료 |
 | 유저 탈퇴     |       |         |
-| swagger 설정 다듬기 | |  |
+| swagger 설정 다듬기 | | oauth 설정 넣는 부분 찾아보기 |
 
 ## 소스 설정 방법
 1. mysql 5.7 설치 및 아래 sql 알맞게 실행
-2. IDE 에 lombok 설정 (IntelliJ 쓸 경우, 어노테이션 설정 포함)
-3. 프로젝트 import
+2. 프로젝트 import
+3. IDE 에 lombok 설정 (IntelliJ 쓸 경우, 어노테이션 설정 포함)
+
+swagger
+http://localhost:8080/swagger-ui.html
 
 #### mysql 5.7 
 
