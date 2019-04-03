@@ -49,11 +49,6 @@ public class UserControllerTests {
     @MockBean
     private SignUpUserService signUpUserService;
 
-    @BeforeClass
-    public static void setUpBeforeClass() {
-
-    }
-
     @Before
     public void setUp() {
         given(signUpUserService.signUp(any())).willReturn(SignUpUserService.SignUpResult.SUCCESS);

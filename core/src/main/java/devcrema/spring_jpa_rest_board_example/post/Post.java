@@ -1,9 +1,10 @@
-package devcrema.spring_jpa_rest_board_example.board;
+package devcrema.spring_jpa_rest_board_example.post;
 
 import devcrema.spring_jpa_rest_board_example.user.User;
 import lombok.*;
 
 import javax.persistence.*;
+import java.util.Objects;
 
 @Getter
 @ToString(callSuper = true)
@@ -11,7 +12,7 @@ import javax.persistence.*;
 @AllArgsConstructor
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Entity
-public class Board {
+public class Post {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
@@ -22,9 +23,12 @@ public class Board {
     @Column(length = 5000)
     private String content;
 
+    @Setter
     @ManyToOne
     @PrimaryKeyJoinColumn
     User user;
 
-    //TODO 기능 구현하면서 viewCount, Like, Images 등 추가할 것!
+    public boolean checkAuthorOfPost(User user){
+        return Objects.equals(this.user.getId(), user.getId());
+    }
 }

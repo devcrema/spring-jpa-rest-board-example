@@ -24,6 +24,9 @@ public class Oauth2ResourceConfig extends ResourceServerConfigurerAdapter {
                 .authorizeRequests()
                 .antMatchers(HttpMethod.POST,"/api/users").permitAll()
                 .antMatchers(HttpMethod.GET,
+                        "/api/posts",
+                        "/api/posts/**").permitAll()
+                .antMatchers(HttpMethod.GET,
                         "/v2/api-docs",
                         "/configuration/ui",
                         "/swagger-resources/**",

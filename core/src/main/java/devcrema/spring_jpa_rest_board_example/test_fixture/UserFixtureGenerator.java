@@ -12,20 +12,24 @@ public class UserFixtureGenerator {
     public static final String NICKNAME = "someone";
     public static final String PASSWORD = "123456789a";
 
-    public static User generateTestUser(UserRepository userRepository, UserPasswordEncoder passwordEncoder) {
+    public static User generateTestUserFixture(UserRepository userRepository, UserPasswordEncoder passwordEncoder) {
 
         Optional<User> optionalUser = userRepository.findByEmail(EMAIL);
 
         if (optionalUser.isPresent()) {
             return optionalUser.get();
         } else {
-            User user = User.builder()
-                    .email(EMAIL)
-                    .nickname(NICKNAME)
-                    .password(PASSWORD)
-                    .build();
+            User user = buildTestUser();
             user.initialize(passwordEncoder);
             return userRepository.save(user);
         }
+    }
+
+    public static User buildTestUser(){
+        return User.builder()
+                .email(EMAIL)
+                .nickname(NICKNAME)
+                .password(PASSWORD)
+                .build();
     }
 }

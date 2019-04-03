@@ -27,7 +27,7 @@ public class UserServiceTests {
 
     @Before
     public void setUp(){
-        UserFixtureGenerator.generateTestUser(userRepository, userPasswordEncoder);
+        UserFixtureGenerator.generateTestUserFixture(userRepository, userPasswordEncoder);
     }
 
     @Test

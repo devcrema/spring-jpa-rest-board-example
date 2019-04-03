@@ -29,9 +29,11 @@ Gradle 모듈
 |-------------|:-----:|---------|
 | 유저 구현     | O     |   spring security (UserDetails, UserDetailsService) 로 구현함.      |
 | 유저 가입     | O      | 완료 |
-| 유저 로그인   | O      | oauth integration test 완료 |
-| 유저 탈퇴     |       |         |
-| swagger 설정 다듬기 | | oauth 설정 넣는 부분 찾아보기 |
+| 유저 로그인    | O      | oauth integration test 완료 |
+| 게시글 리스트  | O  |   |
+| 게시글 작성   | O |  |
+| 게시글 조회   | O |  |
+| 게시글 수정   | O |  |
 
 ## 소스 설정 방법
 1. mysql 5.7 설치 및 아래 sql 알맞게 실행
