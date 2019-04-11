@@ -15,6 +15,8 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 public class AccessTokenUtil {
 
+    public static final String AUTHORIZATION_KEY = "Authorization";
+
     public static String getAccessToken(MockMvc mockMvc, String username, String password) throws Exception {
         MultiValueMap<String, String> params = new LinkedMultiValueMap<>();
         params.add("grant_type", "password");
@@ -36,4 +38,7 @@ public class AccessTokenUtil {
         return new JacksonJsonParser().parseMap(resultString).get("access_token").toString();
     }
 
+    public static String getOauthHeaderValue(MockMvc mockMvc, String username, String password) throws Exception{
+        return "Bearer " + getAccessToken(mockMvc, username, password);
+    }
 }

@@ -30,6 +30,7 @@ public class PostController {
 
     @GetMapping("")
     public ResponseEntity getPosts(){
+        //TODO add projection
         return new ResponseEntity<>(postRepository.findAll(), HttpStatus.OK);
     }
 
