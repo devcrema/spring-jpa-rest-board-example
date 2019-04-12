@@ -1,5 +1,7 @@
 package devcrema.spring_jpa_rest_board_example;
 
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+import com.fasterxml.jackson.datatype.jsr310.deser.LocalDateTimeDeserializer;
 import lombok.Getter;
 import lombok.ToString;
 import org.springframework.data.annotation.CreatedDate;
@@ -16,8 +18,10 @@ import java.time.LocalDateTime;
 @EntityListeners(AuditingEntityListener.class)
 public class BaseAuditingEntity {
     @CreatedDate
+    @JsonDeserialize(using = LocalDateTimeDeserializer.class)
     private LocalDateTime createdTime;
 
     @LastModifiedDate
+    @JsonDeserialize(using = LocalDateTimeDeserializer.class)
     private LocalDateTime modifiedTime;
 }

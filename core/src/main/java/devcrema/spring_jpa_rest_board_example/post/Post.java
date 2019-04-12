@@ -12,7 +12,7 @@ import java.util.Objects;
 @AllArgsConstructor
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Entity
-public class Post {
+public class Post implements GetPostProjection {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
@@ -27,6 +27,8 @@ public class Post {
     @ManyToOne
     @PrimaryKeyJoinColumn
     User user;
+
+    private boolean enabled = true;
 
     public boolean checkAuthorOfPost(User user){
         return Objects.equals(this.user.getId(), user.getId());

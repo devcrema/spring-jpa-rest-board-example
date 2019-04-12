@@ -1,5 +1,6 @@
 package devcrema.spring_jpa_rest_board_example.user;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import devcrema.spring_jpa_rest_board_example.BaseAuditingEntity;
 import lombok.*;
 import org.apache.commons.lang3.RandomStringUtils;
@@ -19,7 +20,7 @@ import java.util.List;
 @AllArgsConstructor
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Entity
-public class User extends BaseAuditingEntity implements UserDetails {
+public class User extends BaseAuditingEntity implements UserDetails, GetUserProjection {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
@@ -50,6 +51,8 @@ public class User extends BaseAuditingEntity implements UserDetails {
     }
 
     //UserDetails 구현부
+    //추후 커스텀 deserializer 필요하기전에는 ignore
+    @JsonIgnore
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
         List<GrantedAuthority> authorities = new ArrayList<>();

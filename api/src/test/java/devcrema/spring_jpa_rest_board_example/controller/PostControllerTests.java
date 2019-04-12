@@ -1,7 +1,9 @@
 package devcrema.spring_jpa_rest_board_example.controller;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import devcrema.spring_jpa_rest_board_example.AccessTokenUtil;
 import devcrema.spring_jpa_rest_board_example.CustomTestConfiguration;
+import devcrema.spring_jpa_rest_board_example.post.GetPostProjection;
 import devcrema.spring_jpa_rest_board_example.post.Post;
 import devcrema.spring_jpa_rest_board_example.post.PostRepository;
 import devcrema.spring_jpa_rest_board_example.test_fixture.PostFixtureGenerator;
@@ -10,11 +12,10 @@ import devcrema.spring_jpa_rest_board_example.user.User;
 import devcrema.spring_jpa_rest_board_example.user.UserPasswordEncoder;
 import devcrema.spring_jpa_rest_board_example.user.UserRepository;
 import lombok.extern.slf4j.Slf4j;
-import org.apache.commons.lang3.StringUtils;
-import org.codehaus.jackson.map.ObjectMapper;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -27,6 +28,7 @@ import org.springframework.test.web.servlet.MvcResult;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.BDDMockito.given;
@@ -54,6 +56,8 @@ public class PostControllerTests {
 
     @Autowired
     private ObjectMapper objectMapper;
+    @Autowired
+    private ModelMapper modelMapper;
 
     private static String oauthHeader;
     private static User user;
@@ -71,17 +75,36 @@ public class PostControllerTests {
     public void testGetPosts() throws Exception {
         //given
         String url = "/api/posts";
-        List<Post> postList = new ArrayList<>();
+        List<GetPostProjection> postList = new ArrayList<>();
         postList.add(PostFixtureGenerator.buildTestPost(user));
         postList.add(PostFixtureGenerator.buildTestPost(user));
-
-        given(postRepository.findAll()).willReturn(postList);
+        given(postRepository.findAllByEnabledTrue()).willReturn(postList);
         //when, then
         MvcResult mvcResult = mockMvc.perform(get(url).header(AccessTokenUtil.AUTHORIZATION_KEY, oauthHeader).contentType(MediaType.APPLICATION_JSON_UTF8))
                 .andDo(print())
                 .andExpect(status().is2xxSuccessful())
                 .andReturn();
-        assertThat(StringUtils.isBlank(mvcResult.getResponse().getContentAsString())).isFalse();
+        List<GetPostProjection> getPostProjections = Arrays.asList(objectMapper.readValue(mvcResult.getResponse().getContentAsString(), Post[].class));
+
+        assertThat(getPostProjections.isEmpty()).isFalse();
     }
+
+    @Test
+    public void testGetPost() throws Exception {
+        //given
+        String url = "/api/posts/1";
+        given(postRepository.findById(1L)).willReturn(Optional.of(PostFixtureGenerator.buildTestPost(user)));
+        //when, then
+        MvcResult mvcResult = mockMvc.perform(get(url).header(AccessTokenUtil.AUTHORIZATION_KEY, oauthHeader).contentType(MediaType.APPLICATION_JSON_UTF8))
+                .andDo(print())
+                .andExpect(status().is2xxSuccessful())
+                .andReturn();
+        GetPostProjection post = objectMapper.readValue(mvcResult.getResponse().getContentAsString(), Post.class);
+
+        assertThat(post.getTitle()).isEqualTo(PostFixtureGenerator.buildTestPost(user).getTitle());
+    }
+
+    //TODO createPost, modifyPost test code
+
 
 }
