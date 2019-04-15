@@ -52,11 +52,16 @@ public class PostController {
     }
 
     @PutMapping("/{postId}")
-    public ResponseEntity modifyPost(@Valid @RequestBody SavePostRequest savePostRequest, BindingResult bindingResult, @PathVariable("postId") Post post, Authentication authentication) {
+    public ResponseEntity modifyPost(@Valid @RequestBody SavePostRequest savePostRequest, BindingResult bindingResult, @PathVariable("postId") Long postId, Authentication authentication) {
         if (bindingResult.hasErrors()) {
             String errorMessage = bindingResult.getAllErrors().get(0).getDefaultMessage();
             return new ResponseEntity<>(new ResponseMessage(errorMessage), HttpStatus.BAD_REQUEST);
         }
+        Optional<Post> optionalPost = postRepository.findById(postId);
+        if(!optionalPost.isPresent()){
+            return new ResponseEntity<>(new ResponseMessage("해당 게시물을 찾을 수 없습니다."), HttpStatus.NOT_FOUND);
+        }
+        Post post = optionalPost.get();
         if (!post.checkAuthorOfPost((User) authentication.getPrincipal())) {
             return new ResponseEntity<>(new ResponseMessage("수정할 권한이 없습니다."), HttpStatus.FORBIDDEN);
         }
