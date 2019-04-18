@@ -1,14 +1,11 @@
 package devcrema.spring_jpa_rest_board_example.controller;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import devcrema.spring_jpa_rest_board_example.CustomTestConfiguration;
 import devcrema.spring_jpa_rest_board_example.user.SignUpUserRequest;
 import devcrema.spring_jpa_rest_board_example.user.SignUpUserService;
-import devcrema.spring_jpa_rest_board_example.user.UserPasswordEncoder;
-import devcrema.spring_jpa_rest_board_example.user.UserRepository;
 import lombok.extern.slf4j.Slf4j;
-import org.codehaus.jackson.map.ObjectMapper;
 import org.junit.Before;
-import org.junit.BeforeClass;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -32,15 +29,6 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @ActiveProfiles(profiles = "test")
 @Slf4j
 public class UserControllerTests {
-
-    @Autowired
-    private UserController userController;
-
-    @Autowired
-    private UserRepository userRepository;
-
-    @Autowired
-    private UserPasswordEncoder userPasswordEncoder;
 
     @Autowired
     private MockMvc mockMvc;

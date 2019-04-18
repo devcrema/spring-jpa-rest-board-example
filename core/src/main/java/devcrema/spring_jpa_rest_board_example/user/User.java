@@ -51,7 +51,6 @@ public class User extends BaseAuditingEntity implements UserDetails, GetUserProj
     }
 
     //UserDetails 구현부
-    //추후 커스텀 deserializer 필요하기전에는 ignore
     @JsonIgnore
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
