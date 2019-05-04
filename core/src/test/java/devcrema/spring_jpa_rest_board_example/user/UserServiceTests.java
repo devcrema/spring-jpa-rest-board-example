@@ -13,6 +13,7 @@ import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.transaction.annotation.Transactional;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.fail;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest(classes = CustomTestConfiguration.class)
@@ -38,18 +39,16 @@ public class UserServiceTests {
     public void testLoadUserByUsername(){
         //given
         String email = UserFixtureGenerator.EMAIL;
-        String unExistentEmail = "unexistentemail@unexistent-domain.unexistent";
-        boolean usernameNotFoundErrorOccurred = false;
+        String unExistentEmail = "thisIsNotEmail@NotEmail.Not";
         //when
         User user = (User) userService.loadUserByUsername(email);
         try{
             userService.loadUserByUsername(unExistentEmail);
-        } catch (UsernameNotFoundException usernameNotFoundException){
-            usernameNotFoundErrorOccurred = true;
+            fail("expected exception was not occurred.");
+        } catch (UsernameNotFoundException ignored){
         }
 
         //then
         assertThat(user.getEmail()).isEqualTo(email);
-        assertThat(usernameNotFoundErrorOccurred).isTrue();
     }
 }

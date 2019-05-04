@@ -32,8 +32,8 @@ public class User extends BaseAuditingEntity implements UserDetails, GetUserProj
 
     private String password;
 
-    @Column(columnDefinition="bit(1) default 1")
-    private boolean enabled;
+    @Builder.Default
+    private boolean enabled = true;
 
     public void initialize(PasswordEncoder encoder){
         enabled = true;
@@ -64,6 +64,7 @@ public class User extends BaseAuditingEntity implements UserDetails, GetUserProj
         return password;
     }
 
+    @JsonIgnore
     @Override
     public String getUsername() {
         return email;
@@ -76,16 +77,19 @@ public class User extends BaseAuditingEntity implements UserDetails, GetUserProj
 
 
     //지금은 사용안함.
+    @JsonIgnore
     @Override
     public boolean isAccountNonExpired() {
         return true;
     }
 
+    @JsonIgnore
     @Override
     public boolean isAccountNonLocked() {
         return true;
     }
 
+    @JsonIgnore
     @Override
     public boolean isCredentialsNonExpired() {
         return true;

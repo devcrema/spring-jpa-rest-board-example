@@ -28,6 +28,7 @@ public class Post implements GetPostProjection {
     @PrimaryKeyJoinColumn
     User user;
 
+    @Builder.Default
     private boolean enabled = true;
 
     public boolean checkAuthorOfPost(User user){
