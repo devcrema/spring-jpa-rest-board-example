@@ -25,18 +25,14 @@ import static org.assertj.core.api.Assertions.assertThat;
 @Slf4j
 public class OauthIntegrationTests {
     @Autowired
-    private UserRepository userRepository;
-
-    @Autowired
-    private UserPasswordEncoder userPasswordEncoder;
-
+    private UserFixtureGenerator userFixtureGenerator;
     @Autowired
     private MockMvc mockMvc;
 
     @Test
     public void testGetOauthToken() throws Exception{
         //given
-        User user = UserFixtureGenerator.generateTestUserFixture(userRepository, userPasswordEncoder);
+        User user = userFixtureGenerator.generateTestUserFixture();
         //when, then
         String accessToken = AccessTokenUtil.getAccessToken(mockMvc, user.getUsername(), UserFixtureGenerator.PASSWORD);
         log.info(accessToken);

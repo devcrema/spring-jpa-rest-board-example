@@ -7,8 +7,6 @@ import devcrema.spring_jpa_rest_board_example.post.*;
 import devcrema.spring_jpa_rest_board_example.test_fixture.PostFixtureGenerator;
 import devcrema.spring_jpa_rest_board_example.test_fixture.UserFixtureGenerator;
 import devcrema.spring_jpa_rest_board_example.user.User;
-import devcrema.spring_jpa_rest_board_example.user.UserPasswordEncoder;
-import devcrema.spring_jpa_rest_board_example.user.UserRepository;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.Before;
 import org.junit.Test;
@@ -23,7 +21,6 @@ import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
-import org.springframework.validation.BindingResult;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -44,10 +41,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 public class PostControllerTests {
 
     @Autowired
-    private UserRepository userRepository;
-
-    @Autowired
-    private UserPasswordEncoder userPasswordEncoder;
+    private UserFixtureGenerator userFixtureGenerator;
 
     @Autowired
     private MockMvc mockMvc;
@@ -61,6 +55,9 @@ public class PostControllerTests {
     private static String oauthHeader;
     private static User user;
 
+    @Autowired
+    private PostFixtureGenerator postFixtureGenerator;
+
     @MockBean
     private PostRepository postRepository;
 
@@ -69,7 +66,7 @@ public class PostControllerTests {
 
     @Before
     public void setUp() throws Exception{
-        user = UserFixtureGenerator.generateTestUserFixture(userRepository, userPasswordEncoder);
+        user = userFixtureGenerator.generateTestUserFixture();
         oauthHeader = AccessTokenUtil.getOauthHeaderValue(mockMvc, user.getUsername(), UserFixtureGenerator.PASSWORD);
     }
 
@@ -77,7 +74,7 @@ public class PostControllerTests {
     public void testGetPosts() throws Exception {
         //given
         String url = "/api/posts";
-        List<GetPostProjection> postList = new ArrayList<>();
+        List<GetPostResponse> postList = new ArrayList<>();
         postList.add(PostFixtureGenerator.buildTestPost(user));
         postList.add(PostFixtureGenerator.buildTestPost(user));
         given(postRepository.findAllByEnabledTrue()).willReturn(postList);
@@ -86,22 +83,22 @@ public class PostControllerTests {
                 .andDo(print())
                 .andExpect(status().is2xxSuccessful())
                 .andReturn();
-        List<GetPostProjection> getPostProjections = Arrays.asList(objectMapper.readValue(mvcResult.getResponse().getContentAsString(), Post[].class));
+        List<GetPostResponse> getPostRespons = Arrays.asList(objectMapper.readValue(mvcResult.getResponse().getContentAsString(), Post[].class));
 
-        assertThat(getPostProjections.isEmpty()).isFalse();
+        assertThat(getPostRespons.isEmpty()).isFalse();
     }
 
     @Test
     public void testGetPost() throws Exception {
         //given
         String url = "/api/posts/1";
-        given(postRepository.findById(1L)).willReturn(Optional.of(PostFixtureGenerator.buildTestPost(user)));
+        given(postRepository.getById(1L)).willReturn(Optional.of(PostFixtureGenerator.buildTestPost(user)));
         //when, then
         MvcResult mvcResult = mockMvc.perform(get(url).header(AccessTokenUtil.AUTHORIZATION_KEY, oauthHeader).contentType(MediaType.APPLICATION_JSON_UTF8))
                 .andDo(print())
                 .andExpect(status().is2xxSuccessful())
                 .andReturn();
-        GetPostProjection post = objectMapper.readValue(mvcResult.getResponse().getContentAsString(), Post.class);
+        GetPostResponse post = objectMapper.readValue(mvcResult.getResponse().getContentAsString(), Post.class);
 
         assertThat(post.getTitle()).isEqualTo(PostFixtureGenerator.buildTestPost(user).getTitle());
     }
@@ -115,7 +112,7 @@ public class PostControllerTests {
         //when, then
         //권한이 없는 경우
         mockMvc.perform(post(url)
-                    .contentType(MediaType.APPLICATION_JSON_UTF8)
+                    .contentType(MediaType.APPLICATION_JSON)
                     .content(objectMapper.writeValueAsString(savePostRequest)))
                 .andDo(print())
                 .andExpect(status().is4xxClientError())
@@ -123,7 +120,7 @@ public class PostControllerTests {
         //성공
         mockMvc.perform(post(url)
                     .header(AccessTokenUtil.AUTHORIZATION_KEY, oauthHeader)
-                    .contentType(MediaType.APPLICATION_JSON_UTF8)
+                    .contentType(MediaType.APPLICATION_JSON)
                     .content(objectMapper.writeValueAsString(savePostRequest)))
                 .andDo(print())
                 .andExpect(status().is2xxSuccessful())
@@ -142,7 +139,7 @@ public class PostControllerTests {
         given(postRepository.findById(Long.valueOf(2L))).willReturn(Optional.empty());
         mockMvc.perform(put("/api/posts/2")
                 .header(AccessTokenUtil.AUTHORIZATION_KEY, oauthHeader)
-                .contentType(MediaType.APPLICATION_JSON_UTF8)
+                .contentType(MediaType.APPLICATION_JSON)
                 .content(objectMapper.writeValueAsString(savePostRequest)))
                 .andDo(print())
                 .andExpect(status().isNotFound())
@@ -151,7 +148,7 @@ public class PostControllerTests {
         given(postRepository.findById(Long.valueOf(2L))).willReturn(Optional.of(PostFixtureGenerator.buildTestPost(User.builder().id(20L).build())));
         mockMvc.perform(put("/api/posts/2")
                 .header(AccessTokenUtil.AUTHORIZATION_KEY, oauthHeader)
-                .contentType(MediaType.APPLICATION_JSON_UTF8)
+                .contentType(MediaType.APPLICATION_JSON)
                 .content(objectMapper.writeValueAsString(savePostRequest)))
                 .andDo(print())
                 .andExpect(status().isForbidden())
@@ -160,7 +157,7 @@ public class PostControllerTests {
         given(postRepository.findById(Long.valueOf(1L))).willReturn(Optional.of(PostFixtureGenerator.buildTestPost(user)));
         mockMvc.perform(put(url)
                 .header(AccessTokenUtil.AUTHORIZATION_KEY, oauthHeader)
-                .contentType(MediaType.APPLICATION_JSON_UTF8)
+                .contentType(MediaType.APPLICATION_JSON)
                 .content(objectMapper.writeValueAsString(savePostRequest)))
                 .andDo(print())
                 .andExpect(status().is2xxSuccessful())

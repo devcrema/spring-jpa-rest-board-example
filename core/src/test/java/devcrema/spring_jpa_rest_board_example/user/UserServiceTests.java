@@ -13,7 +13,7 @@ import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.transaction.annotation.Transactional;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.assertj.core.api.Assertions.fail;
+import static org.junit.Assert.fail;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest(classes = CustomTestConfiguration.class)
@@ -25,14 +25,11 @@ public class UserServiceTests {
     private UserService userService;
 
     @Autowired
-    private UserRepository userRepository;
-
-    @Autowired
-    private UserPasswordEncoder userPasswordEncoder;
+    private UserFixtureGenerator userFixtureGenerator;
 
     @Before
     public void setUp(){
-        UserFixtureGenerator.generateTestUserFixture(userRepository, userPasswordEncoder);
+        userFixtureGenerator.generateTestUserFixture();
     }
 
     @Test

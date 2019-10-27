@@ -1,6 +1,6 @@
 buildscript {
 	ext {
-		springBootVersion = '2.1.4.RELEASE'
+		springBootVersion = '2.2.0.RELEASE'
 	}
 	repositories {
 		mavenCentral()
@@ -8,6 +8,10 @@ buildscript {
 	dependencies {
 		classpath("org.springframework.boot:spring-boot-gradle-plugin:${springBootVersion}")
 	}
+}
+
+plugins {
+	id "com.github.ben-manes.versions" version "0.27.0"
 }
 
 allprojects {
@@ -42,11 +46,11 @@ subprojects{
 		compileOnly('org.projectlombok:lombok')
 		testCompileOnly('org.projectlombok:lombok')
 
-		implementation 'org.apache.commons:commons-lang3:3.8.1'
-		implementation 'org.modelmapper:modelmapper:2.3.2'
+		implementation 'org.apache.commons:commons-lang3:3.9'
+		implementation 'org.modelmapper:modelmapper:2.3.5'
 
 		testRuntime('com.h2database:h2')
-		testImplementation('org.springframework.boot:spring-boot-starter-test')
+		implementation('org.springframework.boot:spring-boot-starter-test')
 		testImplementation('org.springframework.security:spring-security-test')
 
 		implementation 'io.springfox:springfox-swagger2:2.9.2'

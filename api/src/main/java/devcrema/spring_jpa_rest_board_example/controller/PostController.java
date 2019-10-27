@@ -32,7 +32,7 @@ public class PostController {
 
     @GetMapping("/{postId}")
     public ResponseEntity getPost(@PathVariable("postId") long postId) {
-        Optional<GetPostProjection> optionalPost = postRepository.findById(postId);
+        Optional<GetPostResponse> optionalPost = postRepository.getById(postId);
         return optionalPost.<ResponseEntity>map(post -> new ResponseEntity<>(post, HttpStatus.OK))
                 .orElseGet(() -> new ResponseEntity<>(HttpStatus.NOT_FOUND));
     }

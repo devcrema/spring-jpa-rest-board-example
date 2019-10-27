@@ -1,9 +1,8 @@
 package devcrema.spring_jpa_rest_board_example;
 
 import devcrema.spring_jpa_rest_board_example.test_fixture.UserFixtureGenerator;
-import devcrema.spring_jpa_rest_board_example.user.UserPasswordEncoder;
-import devcrema.spring_jpa_rest_board_example.user.UserRepository;
 import lombok.AllArgsConstructor;
+import lombok.RequiredArgsConstructor;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.context.event.ApplicationReadyEvent;
@@ -12,11 +11,10 @@ import org.springframework.data.jpa.repository.config.EnableJpaAuditing;
 
 @SpringBootApplication
 @EnableJpaAuditing
-@AllArgsConstructor
+@RequiredArgsConstructor
 public class SpringJpaRestBoardExampleApplication {
 
-	private UserRepository userRepository;
-	private UserPasswordEncoder userPasswordEncoder;
+	private final UserFixtureGenerator userFixtureGenerator;
 
 	public static void main(String[] args) {
 		SpringApplication.run(SpringJpaRestBoardExampleApplication.class, args);
@@ -24,6 +22,6 @@ public class SpringJpaRestBoardExampleApplication {
 
 	@EventListener(ApplicationReadyEvent.class)
 	public void initializeAfterStartup() {
-		UserFixtureGenerator.generateTestUserFixture(userRepository, userPasswordEncoder);
+		userFixtureGenerator.generateTestUserFixture();
 	}
 }

@@ -6,6 +6,7 @@ import java.util.List;
 import java.util.Optional;
 
 public interface PostRepository extends JpaRepository<Post, Long> {
-    List<GetPostProjection> findAllByEnabledTrue();
-    Optional<GetPostProjection> findById(long id);
+    List<GetPostResponse> findAllByEnabledTrue();
+    Optional<GetPostResponse> getById(long id);
+    Optional<GetPostDto> getDtoById(long id);
 }
