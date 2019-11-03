@@ -1,9 +1,12 @@
 package devcrema.spring_jpa_rest_board_example.post;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import devcrema.spring_jpa_rest_board_example.CustomTestConfiguration;
 import devcrema.spring_jpa_rest_board_example.test_fixture.PostFixtureGenerator;
 import devcrema.spring_jpa_rest_board_example.test_fixture.UserFixtureGenerator;
 import devcrema.spring_jpa_rest_board_example.user.User;
+import lombok.extern.slf4j.Slf4j;
 import org.hibernate.SessionFactory;
 import org.hibernate.stat.Statistics;
 import org.junit.Before;
@@ -24,6 +27,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 @SpringBootTest(classes = CustomTestConfiguration.class)
 @ActiveProfiles(profiles = "test")
 @Transactional
+@Slf4j
 public class PostRepositoryTest {
 
     @Autowired
@@ -35,6 +39,8 @@ public class PostRepositoryTest {
     PostFixtureGenerator postFixtureGenerator;
     @Autowired
     UserFixtureGenerator userFixtureGenerator;
+    @Autowired
+    ObjectMapper objectMapper;
 
     private static User user;
 
@@ -61,12 +67,16 @@ public class PostRepositoryTest {
     }
 
     @Test
-    public void projectionWithDtoTest(){
+    public void projectionWithDtoTest() throws JsonProcessingException {
         //given
         Post post = postFixtureGenerator.generateTestPostFixture(user);
         //when
         GetPostDto savedPost = postRepository.getDtoById(post.getId()).orElseThrow(RuntimeException::new);
+        GetPostResponse projectionResponse = postRepository.getById(post.getId()).orElseThrow(RuntimeException::new);
         //then
         assertThat(savedPost.getTitle()).isNotEmpty();
+        assertThat(projectionResponse.getUser().getId()).isNotNull();
+        log.info(objectMapper.writeValueAsString(savedPost));
+        log.info(objectMapper.writeValueAsString(projectionResponse));
     }
 }

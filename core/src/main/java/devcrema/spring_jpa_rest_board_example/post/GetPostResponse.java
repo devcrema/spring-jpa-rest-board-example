@@ -8,6 +8,10 @@ public interface GetPostResponse {
     Long getId();
     String getTitle();
     String getContent();
-    User getUser();
+    UserResponse getUser();
     List<Comment> getComments();
+
+    interface UserResponse{
+        Long getId();
+    }
 }

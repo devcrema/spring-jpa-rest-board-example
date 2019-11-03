@@ -6,7 +6,6 @@ import devcrema.spring_jpa_rest_board_example.post.PostRepository;
 import devcrema.spring_jpa_rest_board_example.user.User;
 import lombok.RequiredArgsConstructor;
 import org.springframework.boot.test.context.TestComponent;
-import org.springframework.stereotype.Component;
 
 import java.util.List;
 
