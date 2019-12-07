@@ -19,16 +19,12 @@ public class UserService implements UserDetailsService {
      *
      * @param email 유저 email
      * @return UserDetails 구현체
-     * @throws UsernameNotFoundException 해당 email을 가진 유저가 없을 경우
+     * @throws UsernameNotFoundException 해당 email 을 가진 유저가 없을 경우
      */
     @Override
     public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
-        Optional<User> user = userRepository.findByEmail(email);
-        if(!user.isPresent()) {
-            throw new UsernameNotFoundException(email + " 해당 유저를 찾을 수 없습니다.");
-        }
-        return user.get();
+        return userRepository.findByEmail(email)
+                .orElseThrow(() -> new UsernameNotFoundException(email + " 해당 유저를 찾을 수 없습니다."));
     }
-
 
 }

@@ -13,7 +13,7 @@ import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.transaction.annotation.Transactional;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.junit.Assert.fail;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 @ExtendWith(SpringExtension.class)
 @SpringBootTest(classes = CustomTestConfiguration.class)
@@ -35,16 +35,21 @@ public class UserServiceTests {
     public void testLoadUserByUsername(){
         //given
         String email = UserFixtureGenerator.EMAIL;
-        String unExistentEmail = "thisIsNotEmail@NotEmail.Not";
+
         //when
         User user = (User) userService.loadUserByUsername(email);
-        try{
-            userService.loadUserByUsername(unExistentEmail);
-            fail("expected exception was not occurred.");
-        } catch (UsernameNotFoundException ignored){
-        }
 
         //then
         assertThat(user.getEmail()).isEqualTo(email);
+    }
+
+    @Test
+    public void whenLoadUnExistsUserThrowUsernameNotFoundException() {
+        //given
+        String unExistentEmail = "thisIsNotEmail@NotEmail.Not";
+
+        //when, then
+        assertThatThrownBy(()->userService.loadUserByUsername(unExistentEmail))
+                .isInstanceOf(UsernameNotFoundException.class);
     }
 }
