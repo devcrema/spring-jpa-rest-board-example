@@ -1,14 +1,13 @@
 package devcrema.spring_jpa_rest_board_example.user;
 
 import devcrema.spring_jpa_rest_board_example.CustomTestConfiguration;
-import lombok.extern.slf4j.Slf4j;
-import org.junit.Test;
-import org.junit.runner.RunWith;
+import lombok.RequiredArgsConstructor;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.modelmapper.ModelMapper;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.test.context.ActiveProfiles;
-import org.springframework.test.context.junit4.SpringRunner;
+import org.springframework.test.context.TestConstructor;
+import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Optional;
@@ -16,23 +15,16 @@ import java.util.Optional;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.Assert.fail;
 
-@RunWith(SpringRunner.class)
+@ExtendWith(SpringExtension.class)
 @SpringBootTest(classes = CustomTestConfiguration.class)
-@ActiveProfiles(profiles = "test")
 @Transactional
-@Slf4j
+@RequiredArgsConstructor
+@TestConstructor(autowireMode = TestConstructor.AutowireMode.ALL)
 public class SignUpUserServiceTests {
-    @Autowired
-    private SignUpUserService signUpUserService;
-
-    @Autowired
-    private UserRepository userRepository;
-
-    @Autowired
-    private UserPasswordEncoder userPasswordEncoder;
-
-    @Autowired
-    private ModelMapper modelMapper;
+    private final SignUpUserService signUpUserService;
+    private final UserRepository userRepository;
+    private final UserPasswordEncoder userPasswordEncoder;
+    private final ModelMapper modelMapper;
 
     @Test
     public void testSignUp(){

@@ -10,7 +10,6 @@ import org.springframework.context.event.EventListener;
 import org.springframework.data.jpa.repository.config.EnableJpaAuditing;
 
 @SpringBootApplication
-@EnableJpaAuditing
 @RequiredArgsConstructor
 public class SpringJpaRestBoardExampleApplication {
 

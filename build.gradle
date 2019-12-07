@@ -1,6 +1,6 @@
 buildscript {
 	ext {
-		springBootVersion = '2.2.0.RELEASE'
+		springBootVersion = '2.2.2.RELEASE'
 	}
 	repositories {
 		mavenCentral()
@@ -50,9 +50,11 @@ subprojects{
 		implementation 'org.modelmapper:modelmapper:2.3.5'
 
 		testRuntime('com.h2database:h2')
-		implementation('org.springframework.boot:spring-boot-starter-test')
-		testImplementation('org.springframework.security:spring-security-test')
-		testImplementation('org.springframework.batch:spring-batch-test')
+		implementation('org.springframework.boot:spring-boot-starter-test'){
+			exclude module: 'junit'
+		}
+		testImplementation 'org.springframework.security:spring-security-test'
+		testImplementation 'org.springframework.batch:spring-batch-test'
 
 		implementation 'io.springfox:springfox-swagger2:2.9.2'
 		implementation 'io.springfox:springfox-swagger-ui:2.9.2'
