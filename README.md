@@ -35,6 +35,7 @@ Gradle 모듈
 | 게시글 조회   | O |  |
 | 게시글 수정   | O |  |
 | migrate to springBootTest2.2 junit 5 | O | testConstructor 설정, junit5 |
+| 리팩토링 (api, core 의존성, 아키텍쳐 분리) | | |
 
 ## 소스 설정 방법
 1. mysql 5.7 설치 및 아래 sql 알맞게 실행
