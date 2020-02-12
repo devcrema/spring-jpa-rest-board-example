@@ -1,6 +1,6 @@
 buildscript {
 	ext {
-		springBootVersion = '2.2.2.RELEASE'
+		springBootVersion = '2.2.4.RELEASE'
 	}
 	repositories {
 		mavenCentral()
@@ -43,17 +43,17 @@ subprojects{
 		runtimeOnly('org.springframework.boot:spring-boot-devtools')
 		runtimeOnly('mysql:mysql-connector-java')
 
-		compileOnly('org.projectlombok:lombok')
-		testCompileOnly('org.projectlombok:lombok')
+		compileOnly 'org.projectlombok:lombok:1.18.12'
+		testCompileOnly 'org.projectlombok:lombok:1.18.12'
 
 		implementation 'org.apache.commons:commons-lang3:3.9'
-		implementation 'org.modelmapper:modelmapper:2.3.5'
+		implementation 'org.modelmapper:modelmapper:2.3.6'
 
-		testRuntime('com.h2database:h2')
+		testCompile 'com.h2database:h2'
 		implementation('org.springframework.boot:spring-boot-starter-test'){
 			exclude module: 'junit'
 		}
-		testImplementation 'org.springframework.security:spring-security-test'
+		testImplementation 'org.springframework.security:spring-security-test:5.2.2.RELEASE'
 		testImplementation 'org.springframework.batch:spring-batch-test'
 
 		implementation 'io.springfox:springfox-swagger2:2.9.2'
@@ -63,6 +63,6 @@ subprojects{
 
 project(':api'){
 	dependencies{
-		compile project(':core')
+		implementation project(':core')
 	}
 }
