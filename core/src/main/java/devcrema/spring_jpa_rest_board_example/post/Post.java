@@ -32,6 +32,7 @@ public class Post {
 
     @OneToMany
     @JoinColumn(name = "post_id")
+    @Builder.Default
     private List<Comment> comments = new ArrayList<>();
 
     @Builder.Default

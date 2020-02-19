@@ -61,7 +61,7 @@ public class Oauth2AuthorizationConfig extends AuthorizationServerConfigurerAdap
                 .inMemory()
                 .withClient(CLIENT_ID)
                 .secret(userPasswordEncoder.encode(CLIENT_SECRET))
-                .accessTokenValiditySeconds(-1)
+                .accessTokenValiditySeconds(-1) //infinite
                 .scopes("USER")
                 .authorizedGrantTypes("password");
     }

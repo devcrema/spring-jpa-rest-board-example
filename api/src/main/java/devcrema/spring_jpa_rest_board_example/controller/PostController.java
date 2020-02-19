@@ -13,6 +13,7 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
+import java.util.List;
 import java.util.Optional;
 
 @RestController
@@ -26,33 +27,33 @@ public class PostController {
     private ModelMapper modelMapper;
 
     @GetMapping("")
-    public ResponseEntity getPosts() {
+    public ResponseEntity<List<GetPostResponse>> getPosts() {
         return new ResponseEntity<>(postRepository.findAllByEnabledTrue(), HttpStatus.OK);
     }
 
     @GetMapping("/{postId}")
-    public ResponseEntity getPost(@PathVariable("postId") long postId) {
+    public ResponseEntity<?> getPost(@PathVariable("postId") long postId) {
         Optional<GetPostResponse> optionalPost = postRepository.getById(postId);
-        return optionalPost.<ResponseEntity>map(post -> new ResponseEntity<>(post, HttpStatus.OK))
+        return optionalPost.map(post -> new ResponseEntity<>(post, HttpStatus.OK))
                 .orElseGet(() -> new ResponseEntity<>(HttpStatus.NOT_FOUND));
     }
 
     @PostMapping("")
-    public ResponseEntity createPost(@Valid @RequestBody SavePostRequest savePostRequest, BindingResult bindingResult, Authentication authentication) {
+    public ResponseEntity<?> createPost(@Valid @RequestBody SavePostRequest savePostRequest, BindingResult bindingResult, Authentication authentication) {
         if (bindingResult.hasErrors()) {
             String errorMessage = bindingResult.getAllErrors().get(0).getDefaultMessage();
             return new ResponseEntity<>(new ResponseMessage(errorMessage), HttpStatus.BAD_REQUEST);
         }
 
         Optional<User> optionalUser = userRepository.findById(((User) authentication.getPrincipal()).getId());
-        if (!optionalUser.isPresent()) return new ResponseEntity(HttpStatus.INTERNAL_SERVER_ERROR);
+        if (!optionalUser.isPresent()) return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
 
         savePostService.savePost(savePostRequest.toPost(modelMapper, optionalUser.get()));
-        return new ResponseEntity(HttpStatus.OK);
+        return new ResponseEntity<>(HttpStatus.OK);
     }
 
     @PutMapping("/{postId}")
-    public ResponseEntity modifyPost(@Valid @RequestBody SavePostRequest savePostRequest, BindingResult bindingResult, @PathVariable("postId") Long postId, Authentication authentication) {
+    public ResponseEntity<?> modifyPost(@Valid @RequestBody SavePostRequest savePostRequest, BindingResult bindingResult, @PathVariable("postId") Long postId, Authentication authentication) {
         if (bindingResult.hasErrors()) {
             String errorMessage = bindingResult.getAllErrors().get(0).getDefaultMessage();
             return new ResponseEntity<>(new ResponseMessage(errorMessage), HttpStatus.BAD_REQUEST);
@@ -66,6 +67,6 @@ public class PostController {
             return new ResponseEntity<>(new ResponseMessage("수정할 권한이 없습니다."), HttpStatus.FORBIDDEN);
         }
         savePostService.savePost(savePostRequest.updatePost(modelMapper, post));
-        return new ResponseEntity(HttpStatus.OK);
+        return new ResponseEntity<>(HttpStatus.OK);
     }
 }
