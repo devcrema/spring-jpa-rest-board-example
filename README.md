@@ -8,16 +8,16 @@ spring jpa rest board example, toy project
 
 |써본 것들|comment|
 |---|-------|
-|Spring boot |스프링의 무의미한 설정을 확 줄여줌|
-|Spring data jpa | 데이터를 쉽게 조작할 수 있게 템플릿을 만들어줌|
-|Spring security | 유저 인증 부분에 쓰임, 처음 접할 경우 설정 삽질 필요|
+|Spring boot | 스프링의 무의미한 설정을 확 줄여줌|
+|Spring data jpa | 데이터를 쉽게 조작할 수 있도록 해줌|
+|Spring security | 유저 인증 부분에 쓰임|
 |Spring boot test | 테스트시에는 인메모리 db(h2)쓰도록 설정해둠.|
 |lombok | 무의미하게 쓰게되는 실제 코드 라인수가 몇배까지 절약됨|
 |apache.commons:commons-lang3 | StringUtils.isBlank(string);이런 몇가지 너무 자주 쓰는 유틸을 모아놓아서 편함|
-|spring-security-oauth2|oauth2 인증을 위해 쓰임. 아직 설정 조금 더 공부가 필요함|
+|spring-security-oauth2 | deprecated|
 |model mapper | DTO <-> entity 쉽게 변환가능|
 |gradle | 모듈 분리해서 사용 중 (api, core)|
-|Swagger | api 문서화 용도.|
+|springfox-Swagger2 | api 문서화 용도. (release가 안올라옴에 따라 제거)|
 
 Gradle 모듈
 - api : api 게시판 서버 (controller + config)
@@ -48,9 +48,6 @@ Gradle 모듈
 1. mysql 5.7 설치 및 아래 sql 알맞게 실행
 2. 프로젝트 import
 3. IDE 에 lombok 설정 (IntelliJ 쓸 경우, 어노테이션 설정 포함)
-
-swagger
-http://localhost:8080/swagger-ui.html
 
 #### mysql 5.7 
 
