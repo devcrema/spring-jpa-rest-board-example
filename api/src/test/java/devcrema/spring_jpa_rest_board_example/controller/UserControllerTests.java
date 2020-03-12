@@ -1,7 +1,6 @@
 package devcrema.spring_jpa_rest_board_example.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import devcrema.spring_jpa_rest_board_example.CustomTestConfiguration;
 import devcrema.spring_jpa_rest_board_example.user.SignUpUserRequest;
 import devcrema.spring_jpa_rest_board_example.user.SignUpUserService;
 import lombok.RequiredArgsConstructor;
@@ -24,7 +23,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @ExtendWith(SpringExtension.class)
-@SpringBootTest(classes = CustomTestConfiguration.class)
+@SpringBootTest
 @AutoConfigureMockMvc
 @RequiredArgsConstructor
 @TestConstructor(autowireMode = TestConstructor.AutowireMode.ALL)

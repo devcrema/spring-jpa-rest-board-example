@@ -1,8 +1,7 @@
 package devcrema.spring_jpa_rest_board_example.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import devcrema.spring_jpa_rest_board_example.AccessTokenUtil;
-import devcrema.spring_jpa_rest_board_example.CustomTestConfiguration;
+import devcrema.spring_jpa_rest_board_example.config.JwtTokenProvider;
 import devcrema.spring_jpa_rest_board_example.post.GetPostResponse;
 import devcrema.spring_jpa_rest_board_example.post.Post;
 import devcrema.spring_jpa_rest_board_example.post.PostRepository;
@@ -33,7 +32,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @ExtendWith(SpringExtension.class)
-@SpringBootTest(classes = CustomTestConfiguration.class)
+@SpringBootTest
 @AutoConfigureMockMvc
 @RequiredArgsConstructor
 @TestConstructor(autowireMode = TestConstructor.AutowireMode.ALL)
@@ -53,7 +52,7 @@ public class PostControllerTests {
     @BeforeEach
     public void setUp() throws Exception{
         user = userFixtureGenerator.generateTestUserFixture();
-        oauthHeader = AccessTokenUtil.getOauthHeaderValue(mockMvc, user.getUsername(), UserFixtureGenerator.PASSWORD);
+        //TODO 여기서부터 jwt 토큰 받아오기
     }
 
     @Test
@@ -64,7 +63,7 @@ public class PostControllerTests {
         postRepository.save(PostFixtureGenerator.buildTestPost(user));
         postRepository.save(PostFixtureGenerator.buildTestPost(user));
         //when, then
-        mockMvc.perform(get(url).header(AccessTokenUtil.AUTHORIZATION_KEY, oauthHeader).contentType(MediaType.APPLICATION_JSON))
+        mockMvc.perform(get(url).header(JwtTokenProvider.TOKEN_HEADER, oauthHeader).contentType(MediaType.APPLICATION_JSON))
                 .andDo(print())
                 .andExpect(status().is2xxSuccessful())
                 .andExpect(jsonPath("$").exists());
@@ -78,7 +77,7 @@ public class PostControllerTests {
         Post post = postRepository.save(PostFixtureGenerator.buildTestPost(user));
 
         //when, then
-        mockMvc.perform(get(url).header(AccessTokenUtil.AUTHORIZATION_KEY, oauthHeader).contentType(MediaType.APPLICATION_JSON))
+        mockMvc.perform(get(url).header(JwtTokenProvider.TOKEN_HEADER, oauthHeader).contentType(MediaType.APPLICATION_JSON))
                 .andDo(print())
                 .andExpect(status().is2xxSuccessful())
                 .andExpect(jsonPath("$.title", is(post.getTitle())));
@@ -100,7 +99,7 @@ public class PostControllerTests {
                 .andReturn();
         //성공
         mockMvc.perform(post(url)
-                    .header(AccessTokenUtil.AUTHORIZATION_KEY, oauthHeader)
+                    .header(JwtTokenProvider.TOKEN_HEADER, oauthHeader)
                     .contentType(MediaType.APPLICATION_JSON)
                     .content(objectMapper.writeValueAsString(savePostRequest)))
                 .andDo(print())
@@ -118,14 +117,14 @@ public class PostControllerTests {
         //when, then
         //없는 게시물 요청한 경우
         mockMvc.perform(put("/api/posts/-1")
-                .header(AccessTokenUtil.AUTHORIZATION_KEY, oauthHeader)
+                .header(JwtTokenProvider.TOKEN_HEADER, oauthHeader)
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(objectMapper.writeValueAsString(savePostRequest)))
                 .andDo(print())
                 .andExpect(status().isNotFound());
         //성공
         mockMvc.perform(put(url+post.getId())
-                .header(AccessTokenUtil.AUTHORIZATION_KEY, oauthHeader)
+                .header(JwtTokenProvider.TOKEN_HEADER, oauthHeader)
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(objectMapper.writeValueAsString(savePostRequest)))
                 .andDo(print())
