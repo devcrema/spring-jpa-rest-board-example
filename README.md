@@ -35,7 +35,6 @@ Gradle 모듈
 | 게시글 조회   | O |  |
 | 게시글 수정   | O |  |
 | migrate to springBootTest2.2 junit 5 | O | testConstructor 설정, junit5 |
-| 리팩토링 (api, core 의존성, 아키텍쳐 분리) | | |
 | spring rest docs | | swagger ui release 가 나오지 않음에 따라 스프링 부트 호환불가|
 | queryDSL로 통계 구현 | | |
 | oauth jwt migration| | |
