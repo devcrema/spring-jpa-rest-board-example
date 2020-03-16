@@ -15,8 +15,8 @@ import org.springframework.stereotype.Component;
 
 import javax.servlet.http.HttpServletRequest;
 import java.util.Base64;
+import java.util.Collection;
 import java.util.Date;
-import java.util.List;
 
 @Component
 @RequiredArgsConstructor
@@ -26,13 +26,14 @@ public class JwtTokenProvider {
     private static final String SECRET_KEY = "THIS_IS_JWT_SECRET_KEY!!";
     private static final String ENCODED_SECRET_KEY = Base64.getEncoder().encodeToString(SECRET_KEY.getBytes());
     public static final String TOKEN_HEADER = "Authorization";
+    public static final String TOKEN_HEADER_PREFIX = "Bearer ";
 
     private static final long EXPIRE_TIME = 1000L * 60L * 60L * 24L * 365L;
 
     @Qualifier("userService")
     private final UserDetailsService userDetailsService;
 
-    public String createToken(String userId, List<String> roles) {
+    public String createToken(String userId, Collection<String> roles) {
         Claims claims = Jwts.claims().setSubject(userId);
         claims.put("roles", roles);
         Date now = new Date();
@@ -58,8 +59,9 @@ public class JwtTokenProvider {
     }
 
     public String resolveToken(HttpServletRequest req) {
+        //TODO 여기서부터 에러 핸들링하기
         return req.getHeader(TOKEN_HEADER)
-                .split("Bearer ", 2)[1];
+                .split(TOKEN_HEADER_PREFIX, 2)[1];
     }
 
     public boolean validateToken(String jwtToken) {

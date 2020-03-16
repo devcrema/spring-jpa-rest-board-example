@@ -28,7 +28,7 @@ public class UserServiceTests {
 
     @BeforeEach
     public void setUp(){
-        userFixtureGenerator.generateTestUserFixture();
+        userFixtureGenerator.generate();
     }
 
     @Test

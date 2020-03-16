@@ -4,11 +4,9 @@ import devcrema.spring_jpa_rest_board_example.user.User;
 import devcrema.spring_jpa_rest_board_example.user.UserPasswordEncoder;
 import devcrema.spring_jpa_rest_board_example.user.UserRepository;
 import lombok.RequiredArgsConstructor;
-import org.springframework.boot.test.context.TestComponent;
+import org.springframework.stereotype.Component;
 
-import java.util.Optional;
-
-@TestComponent
+@Component
 @RequiredArgsConstructor
 public class UserFixtureGenerator {
 
@@ -19,20 +17,16 @@ public class UserFixtureGenerator {
     private final UserRepository userRepository;
     private final UserPasswordEncoder userPasswordEncoder;
 
-    public User generateTestUserFixture() {
-
-        Optional<User> optionalUser = userRepository.findByEmail(EMAIL);
-
-        if (optionalUser.isPresent()) {
-            return optionalUser.get();
-        } else {
-            User user = buildTestUser();
-            user.initialize(userPasswordEncoder);
-            return userRepository.save(user);
-        }
+    public User generate() {
+        return userRepository.findByEmail(EMAIL)
+                .orElseGet(() -> {
+                    User user = buildTestUser();
+                    user.initialize(userPasswordEncoder);
+                    return userRepository.save(user);
+                });
     }
 
-    public static User buildTestUser(){
+    public static User buildTestUser() {
         return User.builder()
                 .email(EMAIL)
                 .nickname(NICKNAME)

@@ -32,7 +32,7 @@ public class SavePostServiceTests {
 
     @BeforeEach
     public void setUp(){
-        user = userFixtureGenerator.generateTestUserFixture();
+        user = userFixtureGenerator.generate();
     }
 
     @Test

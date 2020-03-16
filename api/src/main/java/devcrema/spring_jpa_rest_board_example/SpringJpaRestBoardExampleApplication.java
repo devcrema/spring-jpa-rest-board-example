@@ -19,6 +19,6 @@ public class SpringJpaRestBoardExampleApplication {
 
 	@EventListener(ApplicationReadyEvent.class)
 	public void initializeAfterStartup() {
-		userFixtureGenerator.generateTestUserFixture();
+		userFixtureGenerator.generate();
 	}
 }

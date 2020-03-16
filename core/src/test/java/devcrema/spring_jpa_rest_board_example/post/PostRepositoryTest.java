@@ -41,7 +41,7 @@ public class PostRepositoryTest {
 
     @BeforeEach
     public void setUp(){
-        user = userFixtureGenerator.generateTestUserFixture();
+        user = userFixtureGenerator.generate();
     }
 
     @Test
