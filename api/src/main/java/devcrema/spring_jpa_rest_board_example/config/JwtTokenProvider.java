@@ -1,5 +1,6 @@
 package devcrema.spring_jpa_rest_board_example.config;
 
+import devcrema.spring_jpa_rest_board_example.InvalidTokenException;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jws;
 import io.jsonwebtoken.Jwts;
@@ -58,10 +59,16 @@ public class JwtTokenProvider {
                 .getSubject();
     }
 
-    public String resolveToken(HttpServletRequest req) {
-        //TODO 여기서부터 에러 핸들링하기
-        return req.getHeader(TOKEN_HEADER)
-                .split(TOKEN_HEADER_PREFIX, 2)[1];
+    public String resolveToken(HttpServletRequest request) {
+        String tokenHeader;
+        try{
+            tokenHeader = request.getHeader(TOKEN_HEADER)
+                    .split(TOKEN_HEADER_PREFIX, 2)[1];
+        } catch (NullPointerException exception){
+            //TODO error handling
+            throw new InvalidTokenException("header is not valid : " + request.getHeader(TOKEN_HEADER));
+        }
+        return tokenHeader;
     }
 
     public boolean validateToken(String jwtToken) {

@@ -8,7 +8,6 @@ import lombok.AllArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.core.Authentication;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
@@ -39,21 +38,16 @@ public class PostController {
     }
 
     @PostMapping("")
-    public ResponseEntity<?> createPost(@Valid @RequestBody SavePostRequest savePostRequest, BindingResult bindingResult, Authentication authentication) {
-        if (bindingResult.hasErrors()) {
-            String errorMessage = bindingResult.getAllErrors().get(0).getDefaultMessage();
-            return new ResponseEntity<>(new ResponseMessage(errorMessage), HttpStatus.BAD_REQUEST);
-        }
-
-        Optional<User> optionalUser = userRepository.findById(((User) authentication.getPrincipal()).getId());
-        if (!optionalUser.isPresent()) return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
-
-        savePostService.savePost(savePostRequest.toPost(modelMapper, optionalUser.get()));
+    public ResponseEntity<?> createPost(@Valid @RequestBody SavePostRequest savePostRequest, BindingResult bindingResult, User user) {
+        savePostService.savePost(savePostRequest.toPost(modelMapper, user));
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
     @PutMapping("/{postId}")
-    public ResponseEntity<?> modifyPost(@Valid @RequestBody SavePostRequest savePostRequest, BindingResult bindingResult, @PathVariable("postId") Long postId, Authentication authentication) {
+    public ResponseEntity<?> modifyPost(@Valid @RequestBody SavePostRequest savePostRequest
+            , BindingResult bindingResult
+            , @PathVariable("postId") Long postId
+            , User user) {
         if (bindingResult.hasErrors()) {
             String errorMessage = bindingResult.getAllErrors().get(0).getDefaultMessage();
             return new ResponseEntity<>(new ResponseMessage(errorMessage), HttpStatus.BAD_REQUEST);
@@ -63,7 +57,7 @@ public class PostController {
             return new ResponseEntity<>(new ResponseMessage("해당 게시물을 찾을 수 없습니다."), HttpStatus.NOT_FOUND);
         }
         Post post = optionalPost.get();
-        if (!post.checkAuthorOfPost((User) authentication.getPrincipal())) {
+        if (!post.checkAuthorOfPost(user)) {
             return new ResponseEntity<>(new ResponseMessage("수정할 권한이 없습니다."), HttpStatus.FORBIDDEN);
         }
         savePostService.savePost(savePostRequest.updatePost(modelMapper, post));
