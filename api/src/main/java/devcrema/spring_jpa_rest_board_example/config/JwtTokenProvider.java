@@ -18,6 +18,7 @@ import javax.servlet.http.HttpServletRequest;
 import java.util.Base64;
 import java.util.Collection;
 import java.util.Date;
+import java.util.Optional;
 
 @Component
 @RequiredArgsConstructor
@@ -60,13 +61,12 @@ public class JwtTokenProvider {
     }
 
     public String resolveToken(HttpServletRequest request) {
-        String tokenHeader;
+        String tokenHeader = "";
         try{
             tokenHeader = request.getHeader(TOKEN_HEADER)
                     .split(TOKEN_HEADER_PREFIX, 2)[1];
         } catch (NullPointerException exception){
-            //TODO error handling
-            throw new InvalidTokenException("header is not valid : " + request.getHeader(TOKEN_HEADER));
+            log.error("header is not valid : " + request.getHeader(TOKEN_HEADER));
         }
         return tokenHeader;
     }
