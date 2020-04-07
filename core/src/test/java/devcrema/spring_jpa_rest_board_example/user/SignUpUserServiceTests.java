@@ -1,6 +1,7 @@
 package devcrema.spring_jpa_rest_board_example.user;
 
 import devcrema.spring_jpa_rest_board_example.CustomTestConfiguration;
+import devcrema.spring_jpa_rest_board_example.test_fixture.UserFixtureGenerator;
 import lombok.RequiredArgsConstructor;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -13,6 +14,7 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.junit.Assert.fail;
 
 @ExtendWith(SpringExtension.class)
@@ -26,35 +28,48 @@ public class SignUpUserServiceTests {
     private final UserPasswordEncoder userPasswordEncoder;
     private final ModelMapper modelMapper;
 
+    private final UserFixtureGenerator userFixtureGenerator;
+
     @Test
-    public void testSignUp(){
+    public void testSignUp() {
         //given
-        String email = "email@unexistent-domain.unexistent";
-        String nickname = "first user";
         String password = "testPassword";
-        User validRequest = new SignUpUserRequest(email, nickname, password).toUser(modelMapper);
-        User duplicatedEmailRequest = new SignUpUserRequest(email, "second user", password).toUser(modelMapper);
-        User duplicatedNicknameRequest = new SignUpUserRequest("email2@unexistent-domain.unexistent", nickname, password).toUser(modelMapper);
+        String nickname =  "first user";
+        User signUpRequest = new SignUpUserRequest("test-email@email.email"
+                , nickname
+                , password)
+                .toUser(modelMapper);
         long userCount = userRepository.count();
 
         //when
-        SignUpUserService.SignUpResult maybeSuccess = signUpUserService.signUp(validRequest);
-        SignUpUserService.SignUpResult maybeEmailDuplicated = signUpUserService.signUp(duplicatedEmailRequest);
-        SignUpUserService.SignUpResult maybeNicknameDuplicated = signUpUserService.signUp(duplicatedNicknameRequest);
+        signUpUserService.signUp(signUpRequest);
 
         //then
-        assertThat(maybeSuccess).isEqualTo(SignUpUserService.SignUpResult.SUCCESS);
-        assertThat(maybeEmailDuplicated).isEqualTo(SignUpUserService.SignUpResult.DUPLICATED_EMAIL);
-        assertThat(maybeNicknameDuplicated).isEqualTo(SignUpUserService.SignUpResult.DUPLICATED_NICKNAME);
         assertThat(userRepository.count()).isEqualTo(userCount + 1);
-        Optional<User> savedUser = userRepository.findByEmail(email);
-        if(savedUser.isPresent()){
-            assertThat(userPasswordEncoder.matches(password,savedUser.get().getPassword())).isTrue();
-            assertThat(savedUser.get().getNickname()).isEqualTo(nickname);
-        } else {
-            fail("saved user is not found!!");
-        }
+        assertThat(userRepository.findByEmail(signUpRequest.getEmail()))
+                .isPresent()
+                .hasValueSatisfying((it)->{
+                    assertThat(userPasswordEncoder.matches(password,it.getPassword())).isTrue();
+                    assertThat(it.getNickname()).isEqualTo(nickname);
+                });
+    }
 
+    @Test
+    public void testDuplicatedEmailException() {
+        //given
+        User generatedUser = userFixtureGenerator.generate();
+        User duplicatedEmailRequest = new SignUpUserRequest(generatedUser.getEmail()
+                , "second user"
+                , "password")
+                .toUser(modelMapper);
+        //when, then
+        assertThatThrownBy(() -> signUpUserService.signUp(duplicatedEmailRequest))
+                .isInstanceOf(DuplicatedEmailException.class);
+    }
+
+
+    public void testDuplicatedNicknameException(){
+        //TODO
     }
 
 }

@@ -21,14 +21,14 @@ public class SignUpUserService {
         DUPLICATED_NICKNAME,
         SUCCESS
     }
+//TODO 에러 핸들링
 
     @Transactional
-    public SignUpResult signUp(User requestedUser) {
-        if(userRepository.existsByEmail(requestedUser.getEmail())) return SignUpResult.DUPLICATED_EMAIL;
-        if(userRepository.existsByNickname(requestedUser.getNickname())) return SignUpResult.DUPLICATED_NICKNAME;
+    public void signUp(User requestedUser) {
+        if(userRepository.existsByEmail(requestedUser.getEmail())) throw new DuplicatedEmailException();
+//        if(userRepository.existsByNickname(requestedUser.getNickname())) return SignUpResult.DUPLICATED_NICKNAME;
         requestedUser.initialize(userPasswordEncoder);
         User user = userRepository.save(requestedUser);
-        log.info("SignUp:"+user.toString());
-        return SignUpResult.SUCCESS;
+        log.info("SignUp:" + user.toString());
     }
 }

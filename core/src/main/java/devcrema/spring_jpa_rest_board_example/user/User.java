@@ -3,7 +3,6 @@ package devcrema.spring_jpa_rest_board_example.user;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import devcrema.spring_jpa_rest_board_example.BaseAuditingEntity;
 import lombok.*;
-import org.apache.commons.lang3.RandomStringUtils;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -40,12 +39,6 @@ public class User extends BaseAuditingEntity implements UserDetails, GetUserProj
         encodePassword(encoder);
     }
 
-    public String resetPassword(PasswordEncoder encoder) {
-        String resetPassword = RandomStringUtils.randomAlphabetic(6).toLowerCase() + RandomStringUtils.randomNumeric(6);
-        this.password = encoder.encode(resetPassword);
-        return resetPassword;
-    }
-
     private void encodePassword(PasswordEncoder encoder){
         this.password = encoder.encode(this.password);
     }
@@ -75,8 +68,6 @@ public class User extends BaseAuditingEntity implements UserDetails, GetUserProj
         return enabled;
     }
 
-
-    //지금은 사용안함.
     @JsonIgnore
     @Override
     public boolean isAccountNonExpired() {

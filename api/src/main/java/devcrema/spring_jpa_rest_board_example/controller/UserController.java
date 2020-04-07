@@ -36,18 +36,18 @@ public class UserController {
         if (signUpUserRequest == null) {
             return new ResponseEntity<>(new ResponseMessage("request can not be null"), HttpStatus.BAD_REQUEST);
         }
-
-        SignUpUserService.SignUpResult result = signUpUserService.signUp(signUpUserRequest.toUser(modelMapper));
-
-        switch (result) {
-            case SUCCESS:
-                return new ResponseEntity<>(new ResponseMessage(SUCCESS.name()), HttpStatus.OK);
-            case DUPLICATED_NICKNAME:
-                return new ResponseEntity<>(new ResponseMessage(DUPLICATED_NICKNAME.name()), HttpStatus.CONFLICT);
-            case DUPLICATED_EMAIL:
-                return new ResponseEntity<>(new ResponseMessage(DUPLICATED_EMAIL.name()), HttpStatus.CONFLICT);
-            default:
-                return new ResponseEntity<>(new ResponseMessage(HttpStatus.INTERNAL_SERVER_ERROR.name()), HttpStatus.INTERNAL_SERVER_ERROR);
-        }
+        //TODO 에러 핸들링 테스트코드 작성
+        signUpUserService.signUp(signUpUserRequest.toUser(modelMapper));
+        return new ResponseEntity<>(new ResponseMessage(SUCCESS.name()), HttpStatus.OK);
+//        switch (result) {
+//            case SUCCESS:
+//                return new ResponseEntity<>(new ResponseMessage(SUCCESS.name()), HttpStatus.OK);
+//            case DUPLICATED_NICKNAME:
+//                return new ResponseEntity<>(new ResponseMessage(DUPLICATED_NICKNAME.name()), HttpStatus.CONFLICT);
+//            case DUPLICATED_EMAIL:
+//                return new ResponseEntity<>(new ResponseMessage(DUPLICATED_EMAIL.name()), HttpStatus.CONFLICT);
+//            default:
+//                return new ResponseEntity<>(new ResponseMessage(HttpStatus.INTERNAL_SERVER_ERROR.name()), HttpStatus.INTERNAL_SERVER_ERROR);
+//        }
     }
 }
