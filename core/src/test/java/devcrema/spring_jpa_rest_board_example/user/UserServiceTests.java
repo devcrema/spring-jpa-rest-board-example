@@ -3,10 +3,10 @@ package devcrema.spring_jpa_rest_board_example.user;
 import devcrema.spring_jpa_rest_board_example.CustomTestConfiguration;
 import devcrema.spring_jpa_rest_board_example.test_fixture.UserFixtureGenerator;
 import lombok.RequiredArgsConstructor;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.test.context.TestConstructor;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
@@ -26,30 +26,26 @@ public class UserServiceTests {
 
     private final UserFixtureGenerator userFixtureGenerator;
 
-    @BeforeEach
-    public void setUp(){
-        userFixtureGenerator.generate();
-    }
-
     @Test
-    public void testLoadUserByUsername(){
+    public void testLoadUserByUsername() {
         //given
-        String email = UserFixtureGenerator.EMAIL;
+        User user = userFixtureGenerator.generate();
 
         //when
-        User user = (User) userService.loadUserByUsername(email);
+        UserDetails userDetails = userService.loadUserByUsername(Long.toString(user.getId()));
 
         //then
-        assertThat(user.getEmail()).isEqualTo(email);
+        String email = ((User) userDetails).getEmail();
+        assertThat(email).isEqualTo(user.getEmail());
     }
 
     @Test
     public void whenLoadUnExistsUserThrowUsernameNotFoundException() {
         //given
-        String unExistentEmail = "thisIsNotEmail@NotEmail.Not";
+        String unRegisteredUserId = "-1";
 
         //when, then
-        assertThatThrownBy(()->userService.loadUserByUsername(unExistentEmail))
+        assertThatThrownBy(() -> userService.loadUserByUsername(unRegisteredUserId))
                 .isInstanceOf(UsernameNotFoundException.class);
     }
 }
