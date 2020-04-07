@@ -3,7 +3,7 @@ package devcrema.spring_jpa_rest_board_example.controller;
 import devcrema.spring_jpa_rest_board_example.ResponseMessage;
 import devcrema.spring_jpa_rest_board_example.post.*;
 import devcrema.spring_jpa_rest_board_example.user.User;
-import devcrema.spring_jpa_rest_board_example.user.UserRepository;
+import devcrema.spring_jpa_rest_board_example.user.repository.UserRepository;
 import lombok.AllArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.springframework.http.HttpStatus;

@@ -1,5 +1,6 @@
 package devcrema.spring_jpa_rest_board_example.user;
 
+import devcrema.spring_jpa_rest_board_example.user.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;

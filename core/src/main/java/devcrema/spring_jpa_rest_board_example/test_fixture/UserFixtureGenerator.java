@@ -2,7 +2,7 @@ package devcrema.spring_jpa_rest_board_example.test_fixture;
 
 import devcrema.spring_jpa_rest_board_example.user.User;
 import devcrema.spring_jpa_rest_board_example.user.UserPasswordEncoder;
-import devcrema.spring_jpa_rest_board_example.user.UserRepository;
+import devcrema.spring_jpa_rest_board_example.user.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 
@@ -21,12 +21,12 @@ public class UserFixtureGenerator {
         return userRepository.findByEmail(EMAIL)
                 .orElseGet(() -> {
                     User user = buildTestUser();
-                    user.initialize(userPasswordEncoder);
+                    user.initialize(userPasswordEncoder.encode(user.getPassword()));
                     return userRepository.save(user);
                 });
     }
 
-    public static User buildTestUser() {
+    private User buildTestUser() {
         return User.builder()
                 .email(EMAIL)
                 .nickname(NICKNAME)

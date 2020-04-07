@@ -2,11 +2,11 @@ package devcrema.spring_jpa_rest_board_example.user;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import devcrema.spring_jpa_rest_board_example.BaseAuditingEntity;
+import devcrema.spring_jpa_rest_board_example.user.repository.GetUserProjection;
 import lombok.*;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.security.crypto.password.PasswordEncoder;
 
 import javax.persistence.*;
 import java.util.ArrayList;
@@ -29,18 +29,15 @@ public class User extends BaseAuditingEntity implements UserDetails, GetUserProj
     @Column(unique = true, nullable = false)
     private String nickname;
 
+    @ToString.Exclude
     private String password;
 
     @Builder.Default
     private boolean enabled = true;
 
-    public void initialize(PasswordEncoder encoder){
-        enabled = true;
-        encodePassword(encoder);
-    }
-
-    private void encodePassword(PasswordEncoder encoder){
-        this.password = encoder.encode(this.password);
+    public void initialize(String encodedPassword){
+        this.enabled = true;
+        this.password = encodedPassword;
     }
 
     //UserDetails 구현부

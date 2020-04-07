@@ -1,5 +1,6 @@
-package devcrema.spring_jpa_rest_board_example.user;
+package devcrema.spring_jpa_rest_board_example.user.repository;
 
+import devcrema.spring_jpa_rest_board_example.user.User;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.Optional;

@@ -1,5 +1,8 @@
 package devcrema.spring_jpa_rest_board_example.user;
 
+import devcrema.spring_jpa_rest_board_example.user.exception.DuplicatedEmailException;
+import devcrema.spring_jpa_rest_board_example.user.exception.DuplicatedNicknameException;
+import devcrema.spring_jpa_rest_board_example.user.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -16,19 +19,12 @@ public class SignUpUserService {
     @Qualifier("userPasswordEncoder")
     private final PasswordEncoder userPasswordEncoder;
 
-    public enum SignUpResult {
-        DUPLICATED_EMAIL,
-        DUPLICATED_NICKNAME,
-        SUCCESS
-    }
-//TODO 에러 핸들링
-
     @Transactional
-    public void signUp(User requestedUser) {
-        if(userRepository.existsByEmail(requestedUser.getEmail())) throw new DuplicatedEmailException();
-//        if(userRepository.existsByNickname(requestedUser.getNickname())) return SignUpResult.DUPLICATED_NICKNAME;
-        requestedUser.initialize(userPasswordEncoder);
-        User user = userRepository.save(requestedUser);
+    public void signUp(User signUpUser) {
+        if(userRepository.existsByEmail(signUpUser.getEmail())) throw new DuplicatedEmailException();
+        if(userRepository.existsByNickname(signUpUser.getNickname())) throw new DuplicatedNicknameException();
+        signUpUser.initialize(userPasswordEncoder.encode(signUpUser.getPassword()));
+        User user = userRepository.save(signUpUser);
         log.info("SignUp:" + user.toString());
     }
 }

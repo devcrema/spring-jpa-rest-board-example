@@ -36,13 +36,9 @@ public class UserControllerTests {
     @MockBean
     private SignUpUserService signUpUserService;
 
-    @BeforeEach
-    public void setUp() {
-        given(signUpUserService.signUp(any())).willReturn(SignUpUserService.SignUpResult.SUCCESS);
-    }
-
     @Test
     public void testSignUp() throws Exception {
+        //TODO 테스트코드 목적에 따라 나누기
         //given
         String url = "/api/users";
 
