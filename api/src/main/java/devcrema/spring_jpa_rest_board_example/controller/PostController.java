@@ -1,66 +1,52 @@
 package devcrema.spring_jpa_rest_board_example.controller;
 
-import devcrema.spring_jpa_rest_board_example.ResponseMessage;
+import devcrema.spring_jpa_rest_board_example.exception.ResourceNotFoundException;
 import devcrema.spring_jpa_rest_board_example.post.*;
 import devcrema.spring_jpa_rest_board_example.user.User;
-import devcrema.spring_jpa_rest_board_example.user.repository.UserRepository;
-import lombok.AllArgsConstructor;
+import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
-import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 import java.util.List;
-import java.util.Optional;
 
 @RestController
 @RequestMapping("/api/posts")
-@AllArgsConstructor
+@RequiredArgsConstructor
 public class PostController {
 
-    private PostRepository postRepository;
-    private SavePostService savePostService;
-    private UserRepository userRepository;
-    private ModelMapper modelMapper;
+    private final PostRepository postRepository;
+    private final SavePostService savePostService;
+    private final ModelMapper modelMapper;
 
     @GetMapping("")
-    public ResponseEntity<List<GetPostResponse>> getPosts() {
-        return new ResponseEntity<>(postRepository.findAllByEnabledTrue(), HttpStatus.OK);
+    @ResponseStatus(HttpStatus.OK)
+    public List<GetPostResponse> getPosts() {
+        return postRepository.findAllByEnabledTrue();
     }
 
     @GetMapping("/{postId}")
-    public ResponseEntity<?> getPost(@PathVariable("postId") long postId) {
-        Optional<GetPostResponse> optionalPost = postRepository.getById(postId);
-        return optionalPost.map(post -> new ResponseEntity<>(post, HttpStatus.OK))
-                .orElseGet(() -> new ResponseEntity<>(HttpStatus.NOT_FOUND));
+    @ResponseStatus(HttpStatus.OK)
+    public GetPostResponse getPost(@PathVariable("postId") long postId) {
+        return postRepository.getById(postId)
+                .orElseThrow(ResourceNotFoundException::new);
     }
 
     @PostMapping("")
-    public ResponseEntity<?> createPost(@Valid @RequestBody SavePostRequest savePostRequest, BindingResult bindingResult, User user) {
+    @ResponseStatus(HttpStatus.OK)
+    public void createPost(@Valid @RequestBody SavePostRequest savePostRequest, User user) {
+        //TODO valid 에러 핸들링하기
         savePostService.savePost(savePostRequest.toPost(modelMapper, user));
-        return new ResponseEntity<>(HttpStatus.OK);
     }
 
     @PutMapping("/{postId}")
-    public ResponseEntity<?> modifyPost(@Valid @RequestBody SavePostRequest savePostRequest
-            , BindingResult bindingResult
+    @ResponseStatus(HttpStatus.OK)
+    public void modifyPost(@Valid @RequestBody SavePostRequest savePostRequest
             , @PathVariable("postId") Long postId
             , User user) {
-        if (bindingResult.hasErrors()) {
-            String errorMessage = bindingResult.getAllErrors().get(0).getDefaultMessage();
-            return new ResponseEntity<>(new ResponseMessage(errorMessage), HttpStatus.BAD_REQUEST);
-        }
-        Optional<Post> optionalPost = postRepository.findById(postId);
-        if(!optionalPost.isPresent()){
-            return new ResponseEntity<>(new ResponseMessage("해당 게시물을 찾을 수 없습니다."), HttpStatus.NOT_FOUND);
-        }
-        Post post = optionalPost.get();
-        if (!post.checkAuthorOfPost(user)) {
-            return new ResponseEntity<>(new ResponseMessage("수정할 권한이 없습니다."), HttpStatus.FORBIDDEN);
-        }
-        savePostService.savePost(savePostRequest.updatePost(modelMapper, post));
-        return new ResponseEntity<>(HttpStatus.OK);
+        Post post = postRepository.findById(postId)
+                .orElseThrow(()->new ResourceNotFoundException("해당 게시물을 찾을 수 없습니다."));
+        savePostService.updatePost(savePostRequest.updatePost(modelMapper, post), user);
     }
 }

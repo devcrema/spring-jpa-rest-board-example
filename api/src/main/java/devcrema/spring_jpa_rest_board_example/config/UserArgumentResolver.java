@@ -1,6 +1,6 @@
 package devcrema.spring_jpa_rest_board_example.config;
 
-import devcrema.spring_jpa_rest_board_example.AuthenticationFailedException;
+import devcrema.spring_jpa_rest_board_example.exception.AuthenticationFailedException;
 import devcrema.spring_jpa_rest_board_example.user.User;
 import org.springframework.core.MethodParameter;
 import org.springframework.lang.NonNull;

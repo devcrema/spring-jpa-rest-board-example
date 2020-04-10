@@ -1,7 +1,11 @@
 package devcrema.spring_jpa_rest_board_example.post;
 
+import devcrema.spring_jpa_rest_board_example.NotAuthorOfPostException;
+import devcrema.spring_jpa_rest_board_example.user.User;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
@@ -17,5 +21,11 @@ public class SavePostService {
         postRepository.save(post);
     }
 
+    @Transactional
+    public void updatePost(Post post, User user){
+        if (!post.checkAuthorOfPost(user)) {
+            throw new NotAuthorOfPostException("수정할 권한이 없습니다.");
+        }
+    }
 
 }

@@ -1,4 +1,4 @@
-package devcrema.spring_jpa_rest_board_example;
+package devcrema.spring_jpa_rest_board_example.exception;
 
 public class InvalidTokenException extends RuntimeException {
     public InvalidTokenException() {

@@ -1,6 +1,5 @@
 package devcrema.spring_jpa_rest_board_example.config;
 
-import devcrema.spring_jpa_rest_board_example.InvalidTokenException;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jws;
 import io.jsonwebtoken.Jwts;
@@ -18,7 +17,6 @@ import javax.servlet.http.HttpServletRequest;
 import java.util.Base64;
 import java.util.Collection;
 import java.util.Date;
-import java.util.Optional;
 
 @Component
 @RequiredArgsConstructor

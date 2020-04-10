@@ -1,4 +1,4 @@
-package devcrema.spring_jpa_rest_board_example;
+package devcrema.spring_jpa_rest_board_example.exception;
 
 public class AuthenticationFailedException extends RuntimeException {
     public AuthenticationFailedException() {

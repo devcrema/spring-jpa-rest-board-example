@@ -1,8 +1,10 @@
 package devcrema.spring_jpa_rest_board_example.advice;
 
-import devcrema.spring_jpa_rest_board_example.AuthenticationFailedException;
+import devcrema.spring_jpa_rest_board_example.NotAuthorOfPostException;
+import devcrema.spring_jpa_rest_board_example.exception.AuthenticationFailedException;
 import devcrema.spring_jpa_rest_board_example.BaseError;
-import devcrema.spring_jpa_rest_board_example.InvalidTokenException;
+import devcrema.spring_jpa_rest_board_example.exception.InvalidTokenException;
+import devcrema.spring_jpa_rest_board_example.exception.ResourceNotFoundException;
 import devcrema.spring_jpa_rest_board_example.user.exception.DuplicatedEmailException;
 import devcrema.spring_jpa_rest_board_example.user.exception.DuplicatedNicknameException;
 import lombok.extern.slf4j.Slf4j;
@@ -42,16 +44,18 @@ public class RestExceptionHandlingAdvice {
         log.error(exception.getLocalizedMessage());
         return new BaseError(exception.getLocalizedMessage());
     }
-    //TODO 에러 핸들링 하기
 
-//        if (bindingResult.hasErrors()){
-//            String errorMessage = bindingResult.getAllErrors().get(0).getDefaultMessage();
-//            return new ResponseEntity<>(new ResponseMessage(errorMessage), HttpStatus.BAD_REQUEST);
-//        }
-//    @ExceptionHandler(InvalidTokenException.class)
-//    @ResponseStatus(HttpStatus.BAD_REQUEST)
-//    public BaseError handleInvalidTokenException(InvalidTokenException exception){
-//        log.error(exception.getLocalizedMessage());
-//        return new BaseError(exception.getLocalizedMessage());
-//    }
+    @ExceptionHandler(ResourceNotFoundException.class)
+    @ResponseStatus(HttpStatus.NOT_FOUND)
+    public BaseError handleResourceNotFoundException(ResourceNotFoundException exception){
+        log.error(exception.getLocalizedMessage());
+        return new BaseError(exception.getLocalizedMessage());
+    }
+
+    @ExceptionHandler(NotAuthorOfPostException.class)
+    @ResponseStatus(HttpStatus.FORBIDDEN)
+    public BaseError handleNotAuthorOfPostException(NotAuthorOfPostException exception){
+        log.error(exception.getLocalizedMessage());
+        return new BaseError(exception.getLocalizedMessage());
+    }
 }
