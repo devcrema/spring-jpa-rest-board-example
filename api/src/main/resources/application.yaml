@@ -4,7 +4,6 @@ spring:
 
 #로컬 프로파일
 ---
-resource-path: ${user.home}${file.separator}spring-jpa-rest-board-example-resource${file.separator}
 server:
   port: 18080
 spring:

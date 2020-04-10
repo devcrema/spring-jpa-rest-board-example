@@ -14,10 +14,10 @@ spring jpa rest board example, toy project
 |Spring boot test | 테스트시에는 인메모리 db(h2)쓰도록 설정해둠.|
 |lombok | 무의미하게 쓰게되는 실제 코드 라인수가 몇배까지 절약됨|
 |apache.commons:commons-lang3 | StringUtils.isBlank(string);이런 몇가지 너무 자주 쓰는 유틸을 모아놓아서 편함|
-|spring-security-oauth2 | deprecated|
 |model mapper | DTO <-> entity 쉽게 변환가능|
 |gradle | 모듈 분리해서 사용 중 (api, core)|
 |springfox-Swagger2 | api 문서화 용도. (release가 안올라옴에 따라 제거)|
+|spring-security-oauth2 | deprecated|
 
 Gradle 모듈
 - api : api 게시판 서버 (controller + config)
@@ -35,9 +35,8 @@ Gradle 모듈
 | 게시글 조회   | O |  |
 | 게시글 수정   | O |  |
 | migrate to springBootTest2.2 junit 5 | O | testConstructor 설정, junit5 |
-| spring rest docs | | swagger ui release 가 나오지 않음에 따라 스프링 부트 호환불가|
+| spring rest docs | | |
 | queryDSL로 통계 구현 | | |
-| oauth jwt migration| | |
 | mysql 8.0 migration | | |
 | spring cache를 이용한 게시글 캐시 설정| | |
 | redis로 조회수 랭킹 설정| | |

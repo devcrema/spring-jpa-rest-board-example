@@ -5,8 +5,6 @@ spring:
 
 ---
 
-resource-path: ${user.home}${file.separator}spring-jpa-rest-board-example-resource${file.separator}
-
 spring:
   profiles: test
   datasource:
