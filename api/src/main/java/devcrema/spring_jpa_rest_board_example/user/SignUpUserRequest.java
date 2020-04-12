@@ -6,6 +6,7 @@ import lombok.NoArgsConstructor;
 import org.modelmapper.ModelMapper;
 
 import javax.validation.constraints.Email;
+import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
@@ -17,6 +18,7 @@ public class SignUpUserRequest {
     @Email(message = "email 형식이 맞지 않습니다.")
     private String email;
     @NotNull(message = "닉네임을 입력하셔야합니다.")
+    @NotBlank
     @Size(min = 1, max = 20, message = "닉네임은 1 ~ 20 글자 중에 입력하셔야합니다.")
     private String nickname;
     @NotNull(message = "비밀번호를 입력하셔야합니다.")

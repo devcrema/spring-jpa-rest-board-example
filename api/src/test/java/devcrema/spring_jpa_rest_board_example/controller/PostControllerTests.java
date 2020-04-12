@@ -2,7 +2,6 @@ package devcrema.spring_jpa_rest_board_example.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import devcrema.spring_jpa_rest_board_example.config.JwtTokenProvider;
-import devcrema.spring_jpa_rest_board_example.post.GetPostResponse;
 import devcrema.spring_jpa_rest_board_example.post.Post;
 import devcrema.spring_jpa_rest_board_example.post.PostRepository;
 import devcrema.spring_jpa_rest_board_example.post.SavePostRequest;
@@ -23,8 +22,6 @@ import org.springframework.test.context.TestConstructor;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.test.web.servlet.MockMvc;
 
-import java.util.ArrayList;
-import java.util.List;
 import java.util.stream.Collectors;
 
 import static devcrema.spring_jpa_rest_board_example.config.JwtTokenProvider.TOKEN_HEADER_PREFIX;
@@ -67,7 +64,6 @@ public class PostControllerTests {
     public void testGetPosts() throws Exception {
         //given
         String url = "/api/posts";
-        List<GetPostResponse> postList = new ArrayList<>();
         postRepository.save(PostFixtureGenerator.buildTestPost(user));
         postRepository.save(PostFixtureGenerator.buildTestPost(user));
         //when, then
@@ -138,6 +134,4 @@ public class PostControllerTests {
                 .andDo(print())
                 .andExpect(status().is2xxSuccessful());
     }
-
-
 }

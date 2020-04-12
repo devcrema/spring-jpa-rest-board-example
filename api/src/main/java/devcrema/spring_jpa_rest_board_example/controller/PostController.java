@@ -36,7 +36,7 @@ public class PostController {
     @PostMapping("")
     @ResponseStatus(HttpStatus.OK)
     public void createPost(@Valid @RequestBody SavePostRequest savePostRequest, User user) {
-        //TODO valid 에러 핸들링하기
+        //TODO validation test
         savePostService.savePost(savePostRequest.toPost(modelMapper, user));
     }
 
