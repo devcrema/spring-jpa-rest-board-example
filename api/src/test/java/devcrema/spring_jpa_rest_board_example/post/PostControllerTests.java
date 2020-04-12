@@ -55,9 +55,7 @@ public class PostControllerTests {
     public void setUp() {
         user = userFixtureGenerator.generate();
         token = TOKEN_HEADER_PREFIX + jwtTokenProvider.createToken(String.valueOf(user.getId())
-                , user.getAuthorities().stream()
-                        .map(GrantedAuthority::getAuthority)
-                        .collect(Collectors.toList()));
+                , user.getRoles());
     }
 
     @Test

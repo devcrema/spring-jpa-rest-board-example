@@ -9,9 +9,7 @@ import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import javax.persistence.*;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.List;
+import java.util.*;
 
 @Getter
 @ToString(callSuper = true)
@@ -47,6 +45,12 @@ public class User extends BaseAuditingEntity implements UserDetails, GetUserProj
         List<GrantedAuthority> authorities = new ArrayList<>();
         authorities.add(new SimpleGrantedAuthority("ROLE_USER"));
         return authorities;
+    }
+
+    @JsonIgnore
+    @Transient
+    public Collection<String> getRoles(){ //user만 구현하고 roles를 구현하지 않을 예정
+        return Collections.singletonList("ROLE_USER");
     }
 
     @Override

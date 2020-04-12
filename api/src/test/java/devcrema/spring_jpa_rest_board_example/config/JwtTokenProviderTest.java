@@ -33,9 +33,7 @@ class JwtTokenProviderTest {
         User generateUser = userFixtureGenerator.generate();
         //when
         String token = jwtTokenProvider.createToken(String.valueOf(generateUser.getId())
-                , generateUser.getAuthorities().stream()
-                        .map(GrantedAuthority::getAuthority)
-                        .collect(Collectors.toList()));
+                , generateUser.getRoles());
         //then
         assertThat(jwtTokenProvider.validateToken(token)).isTrue();
     }
