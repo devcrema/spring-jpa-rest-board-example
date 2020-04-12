@@ -20,20 +20,20 @@ public class ErrorResponse {
         String reason;
     }
 
-    public static ErrorResponse of(Exception exception) {
-        return new ErrorResponse(exception.getLocalizedMessage()
-                , exception.getClass().getSimpleName()
+    public static ErrorResponse of(String message, ErrorCode errorCode) {
+        return new ErrorResponse(message
+                , errorCode.name()
                 , new ArrayList<>());
     }
 
-    public static ErrorResponse of(Exception exception, BindingResult bindingResult) {
+    public static ErrorResponse of(String message, ErrorCode errorCode, BindingResult bindingResult) {
         List<FieldError> fieldErrors = bindingResult.getFieldErrors().stream()
                 .map((it) -> new FieldError(it.getField()
                         , String.valueOf(it.getRejectedValue())
                         , it.getDefaultMessage()))
                 .collect(Collectors.toList());
-        return new ErrorResponse("request validation is failed."
-                , exception.getClass().getSimpleName()
+        return new ErrorResponse(message
+                , errorCode.name()
                 , fieldErrors);
     }
 }

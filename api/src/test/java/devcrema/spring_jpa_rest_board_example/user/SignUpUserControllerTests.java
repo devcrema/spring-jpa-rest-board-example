@@ -1,8 +1,8 @@
-package devcrema.spring_jpa_rest_board_example.controller;
+package devcrema.spring_jpa_rest_board_example.user;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import devcrema.spring_jpa_rest_board_example.user.SignUpUserRequest;
-import devcrema.spring_jpa_rest_board_example.user.SignUpUserService;
+import devcrema.spring_jpa_rest_board_example.ErrorCode;
+import devcrema.spring_jpa_rest_board_example.user.exception.DuplicatedEmailException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.Test;
@@ -15,8 +15,12 @@ import org.springframework.test.context.TestConstructor;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.test.web.servlet.MockMvc;
 
+import static org.hamcrest.Matchers.is;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.doThrow;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @ExtendWith(SpringExtension.class)
@@ -25,7 +29,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @RequiredArgsConstructor
 @TestConstructor(autowireMode = TestConstructor.AutowireMode.ALL)
 @Slf4j
-public class UserControllerTests {
+public class SignUpUserControllerTests {
 
     private final MockMvc mockMvc;
     private final ObjectMapper objectMapper;
@@ -37,7 +41,7 @@ public class UserControllerTests {
     private static final String NICKNAME = "first user";
     private static final String PASSWORD = "testPassword";
 
-    private static final String URL = "/api/users";
+    private static final String URL = "/api/users/sign-up";
 
     @Test
     public void signUpWithValidRequestThenReturn200() throws Exception {
@@ -103,5 +107,22 @@ public class UserControllerTests {
                         .content(objectMapper.writeValueAsString(invalidRequest)))
                 .andDo(print())
                 .andExpect(status().isBadRequest());
+    }
+
+    @Test
+    public void signUpWithServiceException() throws Exception {
+        //given
+        doThrow(new DuplicatedEmailException())
+                .when(signUpUserService)
+                .signUp(any());
+        SignUpUserRequest validRequest = new SignUpUserRequest(EMAIL, NICKNAME, PASSWORD);
+        //when, then
+        mockMvc.perform(
+                post(URL)
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(validRequest)))
+                .andDo(print())
+                .andExpect(status().isConflict())
+                .andExpect(jsonPath("$.code", is(ErrorCode.DUPLICATED_EMAIL.name())));
     }
 }

@@ -8,9 +8,9 @@ import org.springframework.web.bind.annotation.*;
 import javax.validation.Valid;
 
 @RestController
-@RequestMapping("/api/users")
+@RequestMapping("/api/users/sign-up")
 @RequiredArgsConstructor
-public class UserController {
+public class SignUpUserController {
 
     private final SignUpUserService signUpUserService;
 
