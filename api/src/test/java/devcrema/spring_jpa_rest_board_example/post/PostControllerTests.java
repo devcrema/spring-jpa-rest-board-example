@@ -14,12 +14,9 @@ import org.modelmapper.ModelMapper;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
-import org.springframework.security.core.GrantedAuthority;
 import org.springframework.test.context.TestConstructor;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.test.web.servlet.MockMvc;
-
-import java.util.stream.Collectors;
 
 import static devcrema.spring_jpa_rest_board_example.config.JwtTokenProvider.TOKEN_HEADER_PREFIX;
 import static org.hamcrest.Matchers.hasSize;
