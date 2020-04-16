@@ -54,7 +54,7 @@ public class PostRepositoryTest {
         statistics.clear();
         //when
         GetPostResponse savedPost = postRepository.getById(post.getId()).orElseThrow(RuntimeException::new);
-        List<Comment> comments = savedPost.getComments();
+        savedPost.getComments();
 
         //then
         assertThat(statistics.getQueryExecutionCount()).isEqualTo(1L);

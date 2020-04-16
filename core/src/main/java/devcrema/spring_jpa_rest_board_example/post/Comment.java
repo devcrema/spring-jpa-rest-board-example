@@ -17,6 +17,7 @@ public class Comment extends BaseAuditingEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     Long id;
     String content;
+    @ManyToOne
     User user;
     @Column(name = "post_id")
     Long postId;

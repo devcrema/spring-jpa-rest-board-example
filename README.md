@@ -37,17 +37,17 @@ Gradle 모듈
 | migrate to springBootTest2.2 junit 5 | O | testConstructor 설정, junit5 |
 | spring rest docs | | |
 | queryDSL로 통계 구현 | | |
-| mysql 8.0 migration | | |
+| mysql 8.0 migration |O| |
 | spring cache를 이용한 게시글 캐시 설정| | |
 | redis로 조회수 랭킹 설정| | |
 | spring batch를 이용한 유저 설정| | |
 
 ## 소스 설정 방법
-1. mysql 5.7 설치 및 아래 sql 알맞게 실행
+1. mysql 8.0 설치 및 아래 sql 알맞게 실행
 2. 프로젝트 import
 3. IDE 에 lombok 설정 (IntelliJ 쓸 경우, 어노테이션 설정 포함)
 
-#### mysql 5.7 
+#### mysql 8.0
 
 create database jpa_rest_board_example DEFAULT CHARACTER SET utf8 COLLATE utf8_general_ci; #디비 생성
 

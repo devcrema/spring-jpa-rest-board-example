@@ -27,7 +27,6 @@ public class Post {
 
     @Setter
     @ManyToOne
-    @PrimaryKeyJoinColumn
     private User user;
 
     @OneToMany
