@@ -14,14 +14,12 @@ spring jpa rest board example, toy project
 |Spring boot test | 테스트시에는 인메모리 db(h2)쓰도록 설정해둠.|
 |lombok | 무의미하게 쓰게되는 실제 코드 라인수가 몇배까지 절약됨|
 |apache.commons:commons-lang3 | StringUtils.isBlank(string);이런 몇가지 너무 자주 쓰는 유틸을 모아놓아서 편함|
-|model mapper | DTO <-> entity 쉽게 변환가능|
+|model mapper | DTO -> entity 쉽게 변환가능|
 |gradle | 모듈 분리해서 사용 중 (api, core)|
 |springfox-Swagger2 | api 문서화 용도. (release가 안올라옴에 따라 제거)|
 |spring-security-oauth2 | deprecated|
 
-Gradle 모듈
-- api : api 게시판 서버 (controller + config)
-- core : core 모듈 (service + entity)
+최대한 DDD를 추구하는 중
 
 ### TODO
 
@@ -29,7 +27,7 @@ Gradle 모듈
 |-------------|:-----:|---------|
 | 유저 구현     | O     |   spring security (UserDetails, UserDetailsService) 로 구현함.      |
 | 유저 가입     | O      | 완료 |
-| 유저 로그인    | O      | oauth integration test 완료 |
+| 유저 로그인    | O      | JWT test 완료 |
 | 게시글 리스트  | O  |   |
 | 게시글 작성   | O |  |
 | 게시글 조회   | O |  |
