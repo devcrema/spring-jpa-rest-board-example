@@ -1,3 +1,2 @@
 rootProject.name = 'spring-jpa-rest-board-example'
-include 'core'
-include 'api'
+include 'board'
