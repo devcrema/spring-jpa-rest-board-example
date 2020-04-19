@@ -15,11 +15,9 @@ spring jpa rest board example, toy project
 |lombok | 무의미하게 쓰게되는 실제 코드 라인수가 몇배까지 절약됨|
 |apache.commons:commons-lang3 | StringUtils.isBlank(string);이런 몇가지 너무 자주 쓰는 유틸을 모아놓아서 편함|
 |model mapper | DTO -> entity 쉽게 변환가능|
-|gradle | 모듈 분리해서 사용 중 (api, core)|
+|gradle |  |
 |springfox-Swagger2 | api 문서화 용도. (release가 안올라옴에 따라 제거)|
 |spring-security-oauth2 | deprecated|
-
-최대한 DDD를 추구하는 중
 
 ### TODO
 
