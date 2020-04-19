@@ -6,6 +6,8 @@ import lombok.*;
 
 import javax.persistence.*;
 
+//TODO comment aggregate 고민
+
 @Getter
 @ToString(callSuper = true)
 @Builder

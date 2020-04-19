@@ -22,9 +22,8 @@ public class SavePostService {
 
     @Transactional
     public void updatePost(Post post, User user){
-        if (!post.checkAuthorOfPost(user)) {
-            throw new NotAuthorOfPostException("수정할 권한이 없습니다.");
-        }
+        if (!post.checkAuthorOfPost(user)) throw new NotAuthorOfPostException("수정할 권한이 없습니다.");
+        postRepository.save(post);
     }
 
 }
