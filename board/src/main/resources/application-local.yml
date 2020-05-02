@@ -1,9 +1,4 @@
-spring:
-  profiles:
-    active: local
 
-#로컬 프로파일
----
 server:
   port: 18080
 spring:
@@ -14,7 +9,7 @@ spring:
       max-request-size: 20MB
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
-    url: jdbc:mysql://localhost:3306/jpa_rest_board_example?useSSL=false&useUnicode=true&characterEncoding=utf8
+    url: jdbc:mysql://localhost:3306/jpa_rest_board_example?useUnicode=true&characterEncoding=utf8&allowPublicKeyRetrieval=true&useSSL=false
     username: jpa_rest_board_example_admin
     password: jpa_rest_board_example_pw
   jpa:

@@ -64,7 +64,7 @@ public class JwtTokenProvider {
             tokenHeader = request.getHeader(TOKEN_HEADER)
                     .split(TOKEN_HEADER_PREFIX, 2)[1];
         } catch (NullPointerException exception){
-            log.error("header is not valid : " + request.getHeader(TOKEN_HEADER));
+            log.info("header is not valid : " + request.getHeader(TOKEN_HEADER));
         }
         return tokenHeader;
     }

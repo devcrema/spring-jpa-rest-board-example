@@ -20,7 +20,6 @@ public class SignUpUserService {
 
     @Transactional
     public void signUp(User signUpUser) {
-        //TODO 도메인 서비스 나눠야 할지 고민, 파라미터를 entity가 아닌 VO로 두는 것은 어떤지 고민
         if(userRepository.existsByEmail(signUpUser.getEmail())) throw new DuplicatedEmailException();
         if(userRepository.existsByNickname(signUpUser.getNickname())) throw new DuplicatedNicknameException();
         signUpUser.initialize(userPasswordEncoder.encode(signUpUser.getPassword()));

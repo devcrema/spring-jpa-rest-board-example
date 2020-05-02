@@ -38,6 +38,11 @@ spring jpa rest board example, toy project
 | redis로 조회수 랭킹 설정| | |
 | spring batch를 이용한 유저 설정| | |
 
+## with docker
+1. install docker
+2. build project
+3. docker-compose -f board/docker-compose.yml up
+
 ## 소스 설정 방법
 1. mysql 8.0 설치 및 아래 sql 알맞게 실행
 2. 프로젝트 import

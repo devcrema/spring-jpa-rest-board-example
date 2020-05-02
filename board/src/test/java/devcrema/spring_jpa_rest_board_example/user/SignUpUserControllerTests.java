@@ -2,14 +2,13 @@ package devcrema.spring_jpa_rest_board_example.user;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import devcrema.spring_jpa_rest_board_example.common.ErrorCode;
-import devcrema.spring_jpa_rest_board_example.user.application.SignUpUserService;
 import devcrema.spring_jpa_rest_board_example.user.application.DuplicatedEmailException;
+import devcrema.spring_jpa_rest_board_example.user.application.SignUpUserService;
 import devcrema.spring_jpa_rest_board_example.user.presentation.SignUpUserRequest;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.internal.hamcrest.HamcrestArgumentMatcher;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
